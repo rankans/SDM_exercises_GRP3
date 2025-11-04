@@ -1,25 +1,24 @@
 #include <iostream>
 #include "company_name.hpp"
+#include "title.hpp"
 
 #include <set>
 
+using namespace std;
+
 int main() {
-    auto cn = company_name::load_from_file("/exercise/imdb/csv/company_name.csv");
+    auto cn = title::load_from_file("/exercise/imdb/csv/title.csv");
     if (!cn) {
-        std::cerr << "Error loading company_name.csv: " << cn.error() << "\n";
+        std::cerr << "Error loading title.csv: " << cn.error() << "\n";
         return 1;
     }
 
-    std::cout << "Loaded " << (*cn).records().size() << " records from company_name.csv\n";
+    std::cout << "Loaded " << (*cn).records().size() << " records from title.csv\n";
 
-    // SELECT COUNT(*) FROM company_name WHERE country_code LIKE '[us]'
+    // SELECT * from titile;
     int count = 0;
     for (auto const& record: (*cn).records()) {
-        if (record.country_code().compare("[us]") == 0) {
-            ++count;
-        }
-    }
-    std::cout << "Count of records with country_code LIKE '[us]': " << count << " (should be 138946)\n";
-    
+        cout<< record;
+    }    
     return 0;
 }

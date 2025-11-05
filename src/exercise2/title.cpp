@@ -19,9 +19,9 @@ expected<title_record, csv::err_t> title_record::load_from_file(string_view file
     size_t row_number = 1;
 
     while(getline(file, row)){
-        auto field_exp = csv::split_line(row, 12, delim);
+        auto field_exp = csv::split_line(row, 13, delim);
         if(!field_exp){
-            return unexpected("could not load field");
+            return unexpected("could not split field");
         }
 
         auto& f = *field_exp;

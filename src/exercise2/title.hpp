@@ -48,7 +48,7 @@ namespace title_space{
 
             title_record() = default;
         public:
-            static inline expected<title_record, csv::err_t> load_from_file(string_view filePath, char delim='|'); //definition of load from file function
+            static expected<title_record, csv::err_t> load_from_file(string_view filePath, char delim='|'); //definition of load from file function
 
             //getters
             const vector<int64_t>& id()                   const noexcept {return _id;}         

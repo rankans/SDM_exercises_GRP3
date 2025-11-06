@@ -8,7 +8,7 @@
 using namespace std;
 using namespace title_space;
 
-expected<title_record, csv::err_t> title_record::load_from_file(string_view filePath, char delim='|'){
+expected<title_record, csv::err_t> title_record::load_from_file(string_view filePath, char delim){
     ifstream file{string(filePath)};
     if(!file.is_open()){
         return unexpected("Unexpected error while opening file");
@@ -16,7 +16,7 @@ expected<title_record, csv::err_t> title_record::load_from_file(string_view file
 
     title_record table;
     string row;
-    size_t row_number = 1;
+    // size_t row_number = 1;
 
     while(getline(file, row)){
         auto field_exp = csv::split_line(row, 13, delim);
@@ -31,7 +31,7 @@ expected<title_record, csv::err_t> title_record::load_from_file(string_view file
         auto imdb_index = csv::from_field<string>(f[2]);
         auto  kind_id = csv::from_field<int64_t>(f[3]);
         auto  production_year = csv::from_field<int64_t>(f[4]);
-        auto  imdb_id = csv::from_field<int>(f[5]);
+        auto  imdb_id = csv::from_field<int64_t>(f[5]);
         auto phonetic_code = csv::from_field<string>(f[6]);
         auto  episode_of_id = csv::from_field<int64_t>(f[7]);
         auto  season_nr = csv::from_field<int64_t>(f[8]);

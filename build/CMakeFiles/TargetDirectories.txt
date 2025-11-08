@@ -1,0 +1,5 @@
+/workspaces/SDM-exercises/build/CMakeFiles/edit_cache.dir
+/workspaces/SDM-exercises/build/CMakeFiles/rebuild_cache.dir
+/workspaces/SDM-exercises/build/src/exercise2/CMakeFiles/exercise2.dir
+/workspaces/SDM-exercises/build/src/exercise2/CMakeFiles/edit_cache.dir
+/workspaces/SDM-exercises/build/src/exercise2/CMakeFiles/rebuild_cache.dir

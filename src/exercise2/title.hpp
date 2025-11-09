@@ -67,7 +67,7 @@ namespace title_space{
             size_t size() const {return(_id.size());}
 
             void print_record(size_t i) const {
-                std::cout << "title_record { "
+                cout << "title_record { "
                         << "id: " << _id[i] << ", "
                         << "title: " << _title[i] << ", "
                         << "imdb_index: " << _imdb_index[i] << ", "

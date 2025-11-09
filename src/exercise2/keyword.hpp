@@ -36,6 +36,9 @@ namespace keyword_space{
             const vector<string>& keyword()  const noexcept {return _keyword;}
             const vector<string>& phonetic_code()  const noexcept {return _phonetic_code;}
 
+            //setter
+            void set_keyword(size_t i, const string& modified_value){_keyword[i] = modified_value;}
+
             size_t size() const {return _id.size();}
 
             void print_record(size_t i) const{

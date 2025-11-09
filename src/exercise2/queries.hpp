@@ -13,16 +13,23 @@ using namespace std;
 class queries_blueprint{
 
     private:
-        title_space::title_record const& title_table;
-        keyword_space::keyword_record const& keyword_table;
+        // title_space::title_record const& title_table;
+        title_space::title_record title_table; //title also needs to change
+        // keyword_space::keyword_record const& keyword_table;
+        keyword_space::keyword_record keyword_table; // for lab 3 we need to modify the original value
         company_name const& company_table;
+
+
+        
 
 
     public:
 
         queries_blueprint(
-                const title_space::title_record& t,
-                const keyword_space::keyword_record& k,
+                // const title_space::title_record& t,
+                title_space::title_record& t, //title also need to change
+                // const keyword_space::keyword_record& k,
+                keyword_space::keyword_record& k, // for lab 3 we need to modify the original table
                 const company_name& c
             ): 
             title_table(t),
@@ -40,5 +47,11 @@ class queries_blueprint{
 
         // SELECT * FROM company_name WHERE name not like '%Group%'
         vector<company_name_record> name_not_like() const;
+
+        //Lab 3
+
+        keyword_space::keyword_record& replace_keyword(); 
+
+        title_space::title_record& replace_production_date();
 
 };

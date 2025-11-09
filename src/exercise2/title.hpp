@@ -64,6 +64,9 @@ namespace title_space{
             const vector<string>& series_years()  const noexcept {return _series_years;}
             const vector<string>& md5sum()  const noexcept {return _md5sum;}
 
+            //setter
+            void set_production_year(size_t i, int64_t modified_year)  {_production_year[i] = modified_year;}
+
             size_t size() const {return(_id.size());}
 
             void print_record(size_t i) const {

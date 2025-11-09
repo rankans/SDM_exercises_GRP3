@@ -46,3 +46,29 @@ vector<company_name_record> queries_blueprint::name_not_like() const{
     }
     return company_name_records;
 }
+
+//Lab 3
+// Find entries in the keyword table, where the keyword starts with a specific sequence
+// of letters of your choice. Modify the found records in-place by replacing the keyword
+// entry with a predefned value.
+
+keyword_space::keyword_record& queries_blueprint::replace_keyword(){
+    for(size_t i=0; i<keyword_table.size(); ++i){
+        if(keyword_table.keyword()[i].find("fifty") != string::npos){
+            keyword_table.set_keyword(i, "fiftyisoldchangedisnew");
+        }
+    }
+    return keyword_table;
+}
+
+title_space::title_record& queries_blueprint::replace_production_date(){
+    for(size_t i=0; i<title_table.size(); ++i){
+        if(title_table.production_year()[i] == 1996 
+        || title_table.production_year()[i] == 1967
+        || title_table.production_year()[i] == 1990
+        || title_table.production_year()[i] == 2000 ){
+            title_table.set_production_year(i,2069);
+        }
+    }
+    return title_table;
+}

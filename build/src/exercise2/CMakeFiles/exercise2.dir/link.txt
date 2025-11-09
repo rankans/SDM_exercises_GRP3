@@ -1,1 +1,0 @@
-/usr/bin/c++ -Wl,--dependency-file=CMakeFiles/exercise2.dir/link.d CMakeFiles/exercise2.dir/main.cpp.o CMakeFiles/exercise2.dir/company_name.cpp.o CMakeFiles/exercise2.dir/utils.cpp.o CMakeFiles/exercise2.dir/title.cpp.o CMakeFiles/exercise2.dir/keyword.cpp.o CMakeFiles/exercise2.dir/queries.cpp.o -o exercise2

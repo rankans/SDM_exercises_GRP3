@@ -69,18 +69,33 @@ class company_name_record {
         std::string _name_pcode_sf;
         std::string _md5sum;
     friend class company_name;
-    friend std::ostream & operator<<(std::ostream & os, company_name_record const & record) {
-        os << "company_name_record { "
-           << "id: " << record.id() << ", "
-           << "name: " << record.name() << ", "
-           << "country_code: " << record.country_code() << ", "
-           << "imdb_id: " << record.imdb_id() << ", "
-           << "name_pcode_nf: " << record.name_pcode_nf() << ", "
-           << "name_pcode_sf: " << record.name_pcode_sf() << ", "
-           << "md5sum: " << record.md5sum()
-           << " }";
-        return os;
-    }
+    // friend std::ostream & operator<<(std::ostream & os, company_name_record const & record) {
+    //     os << "company_name_record { "
+    //        << "id: " << record.id() << ", "
+    //        << "name: " << record.name() << ", "
+    //        << "country_code: " << record.country_code() << ", "
+    //        << "imdb_id: " << record.imdb_id() << ", "
+    //        << "name_pcode_nf: " << record.name_pcode_nf() << ", "
+    //        << "name_pcode_sf: " << record.name_pcode_sf() << ", "
+    //        << "md5sum: " << record.md5sum()
+    //        << " }";
+    //     return os;
+    // }
+
+//     friend std::ostream & operator<<(std::ostream & os, company_name_record const & record) {
+//     os << "company_name_record { "
+//        << "id: " << record.id() << ", "
+//        << "name: " << std::string(record.name()) << ", "
+//        << "country_code: " << std::string(record.country_code()) << ", "
+//        << "imdb_id: " << record.imdb_id() << ", "
+//        << "name_pcode_nf: " << std::string(record.name_pcode_nf()) << ", "
+//        << "name_pcode_sf: " << std::string(record.name_pcode_sf()) << ", "
+//        << "md5sum: " << std::string(record.md5sum())
+//        << " }";
+//     return os;
+// }
+
+
 };
 
 

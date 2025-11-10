@@ -83,10 +83,13 @@ int main() {
         if(modified_keyword.keyword()[i].find("fiftyisoldchangedisnew") != string::npos) modified_keyword.print_record(i);
     }
 
-    auto modified_title = query_tables.replace_production_date();
-    for(size_t i=0; i<modified_title.size(); ++i){ //set it to a lower number of record for testing otherwise it just keeps showing everything
-        if(modified_title.production_year()[i] == 2069) modified_title.print_record(i);
-    }
+    // auto modified_title = query_tables.replace_production_date();
+    // for(size_t i=0; i<modified_title.size(); ++i){ //set it to a lower number of record for testing otherwise it just keeps showing everything
+    //     if(modified_title.production_year()[i] == 2069) modified_title.print_record(i);
+    // }
+
+    //Lab 4
+    
 
 
     return 0;

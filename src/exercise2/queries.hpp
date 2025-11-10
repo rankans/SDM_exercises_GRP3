@@ -54,4 +54,18 @@ class queries_blueprint{
 
         title_space::title_record& replace_production_date();
 
+        // Lab 4 (actually lab 2 as we flipped the implementations)
+
+        // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
+        vector<string> title_in_production_range(int year_start, int year_end) const;
+
+        // SELECT distinct country_code FROM company_name
+        set<string> dictinct_country_code() const;
+
+        // SELECT count(distinct keyword) FROM keyword
+        int count_distinct_keyword() const;
+
+        // SELECT * FROM company_name WHERE name not like '%Group%'
+        vector<company_name_record> name_not_like() const;
+
 };

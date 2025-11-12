@@ -1,7 +1,7 @@
 cmake_minimum_required(VERSION 3.20)
 project(SDM-Exercise2 CXX)
 
-add_executable(exercise2 main.cpp company_name.cpp title.cpp keyword.cpp queries.cpp utils.cpp titleaos.cpp)
+add_executable(exercise2 main.cpp company_name.cpp title.cpp keyword.cpp queries.cpp utils.cpp titleaos.cpp company_name_SoA.cpp)
 set_target_properties(exercise2 PROPERTIES
     CXX_STANDARD 23
     CXX_STANDARD_REQUIRED YES

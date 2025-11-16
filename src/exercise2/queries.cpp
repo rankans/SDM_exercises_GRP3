@@ -72,3 +72,32 @@ title_space::title_record& queries_blueprint::replace_production_date(){
     }
     return title_table;
 }
+
+//Lab 4
+//// SELECT title FROM title WHERE production_year = (SELECT max(production_year) FROM title)
+
+vector<string> queries_blueprint::max_production_year() const{
+    vector<string> title;
+    int64_t max_year = 0;
+    for (const auto& rec : title_aos_table.records()){
+        max_year = max(max_year, rec.production_year());
+    }
+
+    for(const auto& rec : title_aos_table.records()){
+        if(rec.production_year() == max_year){
+        title.push_back(rec.title());
+        }
+    }
+    return title;
+}
+
+//SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
+vector<string> queries_blueprint::title_aos_in_production_range(int year_start, int year_end) const{
+    vector<string> titles;
+    for(auto& rec : title_aos_table.records()){
+        if(rec.production_year() < year_end && rec.production_year() >= year_start){
+            titles.push_back(rec.title());
+        }
+    }
+    return titles;
+}

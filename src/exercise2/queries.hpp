@@ -6,6 +6,7 @@
 #include "title.hpp"
 #include "keyword.hpp"
 #include "company_name.hpp"
+#include "titleaos.hpp"
 
 using namespace std;
 
@@ -19,6 +20,9 @@ class queries_blueprint{
         keyword_space::keyword_record keyword_table; // for lab 3 we need to modify the original value
         company_name const& company_table;
 
+        //Lab 4
+        titleaos const& title_aos_table;
+
 
         
 
@@ -30,11 +34,13 @@ class queries_blueprint{
                 title_space::title_record& t, //title also need to change
                 // const keyword_space::keyword_record& k,
                 keyword_space::keyword_record& k, // for lab 3 we need to modify the original table
-                const company_name& c
+                const company_name& c,
+                const titleaos& ta
             ): 
             title_table(t),
             keyword_table(k),
-            company_table(c){}
+            company_table(c),
+            title_aos_table(ta){}
 
         // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
         vector<string> title_in_production_range(int year_start, int year_end) const;
@@ -54,18 +60,12 @@ class queries_blueprint{
 
         title_space::title_record& replace_production_date();
 
-        // Lab 4 (actually lab 2 as we flipped the implementations)
 
-        // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
-        vector<string> title_in_production_range(int year_start, int year_end) const;
+        //Lab 4
+        // SELECT title FROM title WHERE production_year = (SELECT max(production_year) FROM title)
+        vector<string> max_production_year() const;
 
-        // SELECT distinct country_code FROM company_name
-        set<string> dictinct_country_code() const;
-
-        // SELECT count(distinct keyword) FROM keyword
-        int count_distinct_keyword() const;
-
-        // SELECT * FROM company_name WHERE name not like '%Group%'
-        vector<company_name_record> name_not_like() const;
+        //SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
+        vector<string> title_aos_in_production_range(int year_start, int year_end) const;
 
 };

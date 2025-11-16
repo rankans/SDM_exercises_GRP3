@@ -61,7 +61,7 @@ class title_aos_record{
             string md5sum
         );
         
-        static expected<title_aos_record, csv::err_t> load_from_row(string_view row, char delim = '|');
+        static expected<title_aos_record, csv::err_t> from_csv_row(string_view row, char delim = '|');
 
     public:
         //getters

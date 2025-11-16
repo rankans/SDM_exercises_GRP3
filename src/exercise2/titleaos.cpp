@@ -32,7 +32,7 @@ title_aos_record::title_aos_record(
         _series_years(move(series_years)),
         _md5sum(move(md5sum)){}
 
-expected<title_aos_record, csv::err_t> title_aos_record::load_from_row(string_view row, char delim) {
+expected<title_aos_record, csv::err_t> title_aos_record::from_csv_row(string_view row, char delim) {
     auto fields_exp = csv::split_line(row, 13, delim);
     if (!fields_exp) {
         return unexpected(fields_exp.error());
@@ -76,7 +76,7 @@ expected<titleaos, csv::err_t> titleaos::load_from_file(string_view filePath, ch
     string line;
     size_t line_number = 1;
     while (getline(file, line)) {
-        auto record_exp = record_type::load_from_row(line, delim);
+        auto record_exp = record_type::from_csv_row(line, delim);
         if (!record_exp) {
             return unexpected("Error parsing line " + to_string(line_number) + ": " + record_exp.error());
         }

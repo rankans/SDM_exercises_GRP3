@@ -14,7 +14,9 @@ int main() {
     auto title_table = title_space::title_record::load_from_file("/exercise/imdb/csv/title.csv");
     auto title_table_aos = titleaos::load_from_file("/exercise/imdb/csv/title.csv");
     auto keyword_table = keyword_space::keyword_record::load_from_file("/exercise/imdb/csv/keyword.csv");
+    auto keyword_aos = keyword_aos::load_from_file("/exercise/imdb/csv/keyword.csv");
     auto company_table = company_name::load_from_file("/exercise/imdb/csv/company_name.csv");
+    
     
     if (!title_table || !keyword_table || !company_table) {
         cerr << "Error loading tables: " << "\n";
@@ -26,6 +28,7 @@ int main() {
     auto& keyword_val = *keyword_table;
     auto& company_val = *company_table;
     auto& title_aos_val = *title_table_aos;
+    auto& keyword_aos_val = *keyword_aos;
 
     cout<< "Loaded " << title_val.size() << " records title table.";
     cout<< "\nLoaded " << keyword_val.size() << " records keyword table.";
@@ -36,7 +39,7 @@ int main() {
     // cout<< company_val.records()[1];
 
     //Lab 2 class calls
-    queries_blueprint query_tables(title_val, keyword_val, company_val, title_aos_val);
+    queries_blueprint query_tables(title_val, keyword_val, company_val, keyword_aos_val, title_aos_val);
 
     // {
     //     auto start = std::chrono::high_resolution_clock::now();
@@ -118,6 +121,10 @@ int main() {
         //     cout<<t << "\n";
         // }
     }
+
+    // SELECT DISTINCT KEYWORDS
+    int distinct_count = query_tables.count_distinct_keyword2();
+    cout << "Distinct keywords in keyword_table2: " << distinct_count << endl;
     
     return 0;
 }

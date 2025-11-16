@@ -7,6 +7,7 @@
 #include "keyword.hpp"
 #include "company_name.hpp"
 #include "titleaos.hpp"
+#include "keywordaos.hpp"
 
 using namespace std;
 
@@ -19,6 +20,7 @@ class queries_blueprint{
         // keyword_space::keyword_record const& keyword_table;
         keyword_space::keyword_record keyword_table; // for lab 3 we need to modify the original value
         company_name const& company_table;
+        keyword_aos keyword_table2;
 
         //Lab 4
         titleaos const& title_aos_table;
@@ -35,11 +37,13 @@ class queries_blueprint{
                 // const keyword_space::keyword_record& k,
                 keyword_space::keyword_record& k, // for lab 3 we need to modify the original table
                 const company_name& c,
+                keyword_aos& k2,
                 const titleaos& ta
             ): 
             title_table(t),
             keyword_table(k),
             company_table(c),
+            keyword_table2(k2),
             title_aos_table(ta){}
 
         // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
@@ -67,5 +71,7 @@ class queries_blueprint{
 
         //SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
         vector<string> title_aos_in_production_range(int year_start, int year_end) const;
+
+        int count_distinct_keyword2() const;
 
 };

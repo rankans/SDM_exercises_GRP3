@@ -26,3 +26,16 @@ expected<keyword_aos, csv::err_t> keyword_aos::load_from_file(string_view filepa
 
     return cn;
 }
+
+ostream &operator<<(std::ostream &os, const keyword_aos &table) {
+    if (!table.records().empty()) {
+        const auto &first = table.records().front();
+        os << "keyword_aos first record { "
+           << "id: " << first.id() << ", "
+           << "keyword: " << first.keyword() << ", "
+           << "phonetic_code: " << first.phonetic_code() << " }";
+    } else {
+        os << "keyword_aos (empty)";
+    }
+    return os;
+}

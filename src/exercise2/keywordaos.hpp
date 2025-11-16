@@ -35,24 +35,24 @@ class keyword_aos_record
         {
         }
 
-        static inline std::expected<keyword_aos_record, csv::err_t>
-        from_csv_row(std::string_view row, char delim = '|')
+        static inline expected<keyword_aos_record, csv::err_t>
+        from_csv_row(string_view row, char delim = '|')
         {
             auto fields_exp = csv::split_line(row, 4, delim);
             if (!fields_exp)
             {
-                return std::unexpected(fields_exp.error());
+                return unexpected(fields_exp.error());
             }
             auto &f = *fields_exp;
-            auto id = csv::from_field<std::int64_t>(f[0]);
+            auto id = csv::from_field<int64_t>(f[0]);
             auto keyword = csv::from_field<string>(f[1]);
             if (!id)
             {
-                return std::unexpected("Field 0 (id): " + id.error());
+                return unexpected("Field 0 (id): " + id.error());
             }
             if (!keyword)
             {
-                return std::unexpected("Field 3 (imdb): " + keyword.error());
+                return unexpected("Field 3 (imdb): " + keyword.error());
             }
 
             return keyword_aos_record{
@@ -70,7 +70,7 @@ class keyword_aos_record
         const string &phonetic_code() const noexcept { return _phonetic_code; };
 
         friend class keyword_aos;
-        friend ostream &operator<<(std::ostream &os, const keyword_aos &table);
+        friend ostream &operator<<(ostream &os, const keyword_aos &table);
 
 };
 
@@ -84,7 +84,7 @@ class keyword_aos
         keyword_aos() = default;
 
     public:
-        static expected<keyword_aos, csv::err_t> load_from_file(std::string_view filepath, char delim = '|');
+        static expected<keyword_aos, csv::err_t> load_from_file(string_view filepath, char delim = '|');
         vector<record_type> const &records() const noexcept
         {
             return _records;

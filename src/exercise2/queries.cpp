@@ -101,3 +101,12 @@ vector<string> queries_blueprint::title_aos_in_production_range(int year_start, 
     }
     return titles;
 }
+
+// SELECT count(distinct keyword) FROM keyword
+int queries_blueprint::count_distinct_keyword2() const {
+    set<string> distinct_keywords;
+    for (auto const& rec : keyword_table2.records()) {
+        distinct_keywords.insert(rec.keyword());
+    }
+    return distinct_keywords.size();
+}

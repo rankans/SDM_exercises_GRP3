@@ -61,4 +61,7 @@ public:
 
     // SELECT * FROM company_name WHERE name not like '%Group%'
     vector<company_name_record> name_not_like() const;
+
+    // SELECT * FROM company_name WHERE name not like '%Group%'
+    vector<company_name_record> group_name_not_like() const;
 };

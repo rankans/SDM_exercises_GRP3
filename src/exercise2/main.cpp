@@ -31,9 +31,11 @@ int main()
     auto &title_aos_val = *title_table_aos;
     auto &keyword_aos_val = *keyword_aos;
 
-    cout << "Loaded " << title_val.size() << " records title table.";
-    cout << "\nLoaded " << keyword_val.size() << " records keyword table.";
-    cout << "\nLoaded " << company_val.records().size() << " records company table.\n\n\n";
+    auto &title_val = *title_table;
+    auto &keyword_val = *keyword_table;
+    auto &company_val = *company_table;
+    auto &title_aos_val = *title_table_aos;
+    auto &keyword_aos_val = *keyword_aos;
 
     // title_val.print_record(1);
     // keyword_val.print_record(1);
@@ -124,6 +126,5 @@ int main()
     // SELECT DISTINCT KEYWORDS
     int distinct_count = query_tables.count_distinct_keyword2();
     cout << "Distinct keywords in keyword_table2: " << distinct_count << endl;
-
     return 0;
 }

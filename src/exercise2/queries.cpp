@@ -144,3 +144,17 @@ int queries_blueprint::count_distinct_keyword2() const
     }
     return distinct_keywords.size();
 }
+// LAB 4
+
+vector<company_name_record> queries_blueprint::group_name_not_like() const
+{
+    vector<company_name_record> result;
+    for (const auto &rec : company_table.records())
+    {
+        if (rec.name().find("Group") == string::npos)
+        {
+            result.push_back(rec);
+        }
+    }
+    return result;
+}

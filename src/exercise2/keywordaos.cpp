@@ -18,7 +18,7 @@ expected<keyword_aos, csv::err_t> keyword_aos::load_from_file(string_view filepa
     while (getline(file, line)) {
         auto record_exp = record_type::from_csv_row(line, delim);
         if (!record_exp) {
-            return unexpected("Error parsing line " + std::to_string(line_number) + ": " + record_exp.error());
+            return unexpected("Error parsing line " + to_string(line_number) + ": " + record_exp.error());
         }
         records.push_back(*record_exp);
         ++line_number;
@@ -27,7 +27,7 @@ expected<keyword_aos, csv::err_t> keyword_aos::load_from_file(string_view filepa
     return cn;
 }
 
-ostream &operator<<(std::ostream &os, const keyword_aos &table) {
+ostream &operator<<(ostream &os, const keyword_aos &table) {
     if (!table.records().empty()) {
         const auto &first = table.records().front();
         os << "keyword_aos first record { "

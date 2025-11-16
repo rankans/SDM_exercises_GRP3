@@ -70,18 +70,8 @@ class keyword_aos_record
         const string &phonetic_code() const noexcept { return _phonetic_code; };
 
         friend class keyword_aos;
-        friend ostream &operator<<(ostream &os, keyword_aos const &table) {
-            if (!table.records().empty()) {
-                const auto &first = table.records().front();
-                os << "keyword_aos first record { "
-                << "id: " << first.id() << ", "
-                << "keyword: " << first.keyword() << ", "
-                << "phonetic_code: " << first.phonetic_code() << " }";
-            } else {
-                os << "keyword_aos (empty)";
-            }
-            return os;
-        }
+        friend ostream &operator<<(std::ostream &os, const keyword_aos &table);
+
 };
 
 class keyword_aos

@@ -51,7 +51,7 @@ public:
     int count_distinct_keyword() const;
 
     // SELECT * FROM company_name WHERE name not like '%Group%'
-    vector<company_name_record> name_not_like() const;
+    // vector<company_name_record> name_not_like() const;
 
     // Lab 3
 

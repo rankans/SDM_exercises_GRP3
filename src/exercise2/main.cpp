@@ -6,6 +6,7 @@
 #include "queries.hpp"
 #include "titleaos.hpp"
 #include "keywordaos.hpp"
+#include "company_name_SoA.hpp"
 
 #include <set>
 
@@ -18,6 +19,7 @@ int main()
     auto keyword_table = keyword_space::keyword_record::load_from_file("/exercise/imdb/csv/keyword.csv");
     auto keyword_aos = keyword_aos::load_from_file("/exercise/imdb/csv/keyword.csv");
     auto company_table = company_name::load_from_file("/exercise/imdb/csv/company_name.csv");
+    // auto company_name_soa = company_name_records::load_from_file("/exercise/imdb/csv/company_name.csv");
 
     if (!title_table || !keyword_table || !company_table)
     {
@@ -30,12 +32,7 @@ int main()
     auto &company_val = *company_table;
     auto &title_aos_val = *title_table_aos;
     auto &keyword_aos_val = *keyword_aos;
-
-    auto &title_val = *title_table;
-    auto &keyword_val = *keyword_table;
-    auto &company_val = *company_table;
-    auto &title_aos_val = *title_table_aos;
-    auto &keyword_aos_val = *keyword_aos;
+    // auto &company_name_soa_val = *company_name_soa;
 
     // title_val.print_record(1);
     // keyword_val.print_record(1);
@@ -127,4 +124,18 @@ int main()
     int distinct_count = query_tables.count_distinct_keyword2();
     cout << "Distinct keywords in keyword_table2: " << distinct_count << endl;
     return 0;
+
+    // --------------------------
+    // Lab 4 — AOS query 3test
+    // --------------------------
+    {
+        auto start = std::chrono::high_resolution_clock::now();
+        auto group_not_like = query_tables.group_name_not_like();
+        auto end = std::chrono::high_resolution_clock::now();
+
+        cout << "Number of company names NOT containing 'Group': "
+             << group_not_like.size();
+        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start)
+             << " ms]\n";
+    }
 }

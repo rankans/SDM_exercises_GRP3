@@ -5,13 +5,14 @@
 #include "queries.hpp"
 #include "utils.hpp"
 
-
-
 // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
-vector<string> queries_blueprint::title_in_production_range(int year_start, int year_end) const{
+vector<string> queries_blueprint::title_in_production_range(int year_start, int year_end) const
+{
     vector<string> titles;
-    for(size_t i=0; i< title_table.size(); ++i){
-        if(title_table.production_year()[i] < year_end && title_table.production_year()[i] >= year_start){
+    for (size_t i = 0; i < title_table.size(); ++i)
+    {
+        if (title_table.production_year()[i] < year_end && title_table.production_year()[i] >= year_start)
+        {
             titles.push_back(title_table.title()[i]);
         }
     }
@@ -19,83 +20,100 @@ vector<string> queries_blueprint::title_in_production_range(int year_start, int 
 }
 
 // SELECT distinct country_code FROM company_name
-set<string> queries_blueprint::dictinct_country_code() const{
+set<string> queries_blueprint::dictinct_country_code() const
+{
     set<string> country_codes;
-    for(size_t i=0; i<company_table.records().size(); ++i){
+    for (size_t i = 0; i < company_table.records().size(); ++i)
+    {
         country_codes.insert(company_table.records()[i].country_code());
     }
     return country_codes;
 }
 
 // SELECT count(distinct keyword) FROM keyword
-int queries_blueprint::count_distinct_keyword() const{
+int queries_blueprint::count_distinct_keyword() const
+{
     set<string> distinct_keyword;
-    for(size_t i=0; i<keyword_table.size(); ++i){
+    for (size_t i = 0; i < keyword_table.size(); ++i)
+    {
         distinct_keyword.insert(keyword_table.keyword()[i]);
     }
     return distinct_keyword.size();
 }
 
 // SELECT * FROM company_name WHERE name not like '%Group%'
-vector<company_name_record> queries_blueprint::name_not_like() const{
+vector<company_name_record> queries_blueprint::name_not_like() const
+{
     vector<company_name_record> company_name_records;
-    for(size_t i=0; i<company_table.records().size(); ++i){
-        if(company_table.records()[i].name().find("Group") == string::npos){
+    for (size_t i = 0; i < company_table.records().size(); ++i)
+    {
+        if (company_table.records()[i].name().find("Group") == string::npos)
+        {
             company_name_records.push_back(company_table.records()[i]);
         }
     }
     return company_name_records;
 }
 
-//Lab 3
-// Find entries in the keyword table, where the keyword starts with a specific sequence
-// of letters of your choice. Modify the found records in-place by replacing the keyword
-// entry with a predefned value.
+// Lab 3
+//  Find entries in the keyword table, where the keyword starts with a specific sequence
+//  of letters of your choice. Modify the found records in-place by replacing the keyword
+//  entry with a predefned value.
 
-keyword_space::keyword_record& queries_blueprint::replace_keyword(){
-    for(size_t i=0; i<keyword_table.size(); ++i){
-        if(keyword_table.keyword()[i].find("fifty") != string::npos){
+keyword_space::keyword_record &queries_blueprint::replace_keyword()
+{
+    for (size_t i = 0; i < keyword_table.size(); ++i)
+    {
+        if (keyword_table.keyword()[i].find("fifty") != string::npos)
+        {
             keyword_table.set_keyword(i, "fiftyisoldchangedisnew");
         }
     }
     return keyword_table;
 }
 
-title_space::title_record& queries_blueprint::replace_production_date(){
-    for(size_t i=0; i<title_table.size(); ++i){
-        if(title_table.production_year()[i] == 1996 
-        || title_table.production_year()[i] == 1967
-        || title_table.production_year()[i] == 1990
-        || title_table.production_year()[i] == 2000 ){
-            title_table.set_production_year(i,2069);
+title_space::title_record &queries_blueprint::replace_production_date()
+{
+    for (size_t i = 0; i < title_table.size(); ++i)
+    {
+        if (title_table.production_year()[i] == 1996 || title_table.production_year()[i] == 1967 || title_table.production_year()[i] == 1990 || title_table.production_year()[i] == 2000)
+        {
+            title_table.set_production_year(i, 2069);
         }
     }
     return title_table;
 }
 
-//Lab 4
+// Lab 4
 //// SELECT title FROM title WHERE production_year = (SELECT max(production_year) FROM title)
 
-vector<string> queries_blueprint::max_production_year() const{
+vector<string> queries_blueprint::max_production_year() const
+{
     vector<string> title;
     int64_t max_year = 0;
-    for (const auto& rec : title_aos_table.records()){
+    for (const auto &rec : title_aos_table.records())
+    {
         max_year = max(max_year, rec.production_year());
     }
 
-    for(const auto& rec : title_aos_table.records()){
-        if(rec.production_year() == max_year){
-        title.push_back(rec.title());
+    for (const auto &rec : title_aos_table.records())
+    {
+        if (rec.production_year() == max_year)
+        {
+            title.push_back(rec.title());
         }
     }
     return title;
 }
 
-//SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
-vector<string> queries_blueprint::title_aos_in_production_range(int year_start, int year_end) const{
+// SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
+vector<string> queries_blueprint::title_aos_in_production_range(int year_start, int year_end) const
+{
     vector<string> titles;
-    for(auto& rec : title_aos_table.records()){
-        if(rec.production_year() < year_end && rec.production_year() >= year_start){
+    for (auto &rec : title_aos_table.records())
+    {
+        if (rec.production_year() < year_end && rec.production_year() >= year_start)
+        {
             titles.push_back(rec.title());
         }
     }
@@ -103,10 +121,41 @@ vector<string> queries_blueprint::title_aos_in_production_range(int year_start, 
 }
 
 // SELECT count(distinct keyword) FROM keyword
-int queries_blueprint::count_distinct_keyword2() const {
+int queries_blueprint::count_distinct_keyword2() const
+{
     set<string> distinct_keywords;
-    for (auto const& rec : keyword_table2.records()) {
+    for (auto const &rec : keyword_table2.records())
+    {
         distinct_keywords.insert(rec.keyword());
     }
     return distinct_keywords.size();
+}
+
+// Lab 5 - BATCH PROCESS
+//  SELECT count(distinct keyword) FROM keyword
+int queries_blueprint::batch_process_count_distinct_keyword() const
+{
+    set<string> distinct_keywords;
+    keyword_table.batch_process([&](size_t start, size_t len)
+                                {
+        for (size_t i = 0; i < len; i++) {
+            distinct_keywords.insert(keyword_table.keyword()[start + i]);
+        } });
+
+    return distinct_keywords.size();
+}
+
+keyword_space::keyword_record &queries_blueprint::batch_process_replace_keyword()
+{
+    keyword_table.batch_process([&](size_t start, size_t len)
+                                {
+        for (size_t i = 0; i < len; i++){
+            int idx = start + i;
+            if (keyword_table.keyword()[idx].find("fiftyisoldchangedisnew") != string::npos)
+            {
+                keyword_table.set_keyword(idx, "changedtotest");
+            }
+        } });
+
+    return keyword_table;
 }

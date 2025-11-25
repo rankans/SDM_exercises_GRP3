@@ -10,35 +10,35 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     auto title_table = title_space::title_record::load_from_file("/exercise/imdb/csv/title.csv");
     auto title_table_aos = titleaos::load_from_file("/exercise/imdb/csv/title.csv");
     auto keyword_table = keyword_space::keyword_record::load_from_file("/exercise/imdb/csv/keyword.csv");
     auto keyword_aos = keyword_aos::load_from_file("/exercise/imdb/csv/keyword.csv");
     auto company_table = company_name::load_from_file("/exercise/imdb/csv/company_name.csv");
-    
-    
-    if (!title_table || !keyword_table || !company_table) {
+
+    if (!title_table || !keyword_table || !company_table)
+    {
         cerr << "Error loading tables: " << "\n";
         return 1;
     }
 
+    auto &title_val = *title_table;
+    auto &keyword_val = *keyword_table;
+    auto &company_val = *company_table;
+    auto &title_aos_val = *title_table_aos;
+    auto &keyword_aos_val = *keyword_aos;
 
-    auto& title_val = *title_table;
-    auto& keyword_val = *keyword_table;
-    auto& company_val = *company_table;
-    auto& title_aos_val = *title_table_aos;
-    auto& keyword_aos_val = *keyword_aos;
+    cout << "Loaded " << title_val.size() << " records title table.";
+    cout << "\nLoaded " << keyword_val.size() << " records keyword table.";
+    cout << "\nLoaded " << company_val.records().size() << " records company table.\n\n\n";
 
-    cout<< "Loaded " << title_val.size() << " records title table.";
-    cout<< "\nLoaded " << keyword_val.size() << " records keyword table.";
-    cout<< "\nLoaded " << company_val.records().size() << " records company table.\n\n\n";
-
-    // title_val.print_record(1);  
+    // title_val.print_record(1);
     // keyword_val.print_record(1);
     // cout<< company_val.records()[1];
 
-    //Lab 2 class calls
+    // Lab 2 class calls
     queries_blueprint query_tables(title_val, keyword_val, company_val, keyword_aos_val, title_aos_val);
 
     // {
@@ -51,7 +51,6 @@ int main() {
     //     //     cout<<t << "\n";
     //     // }
     // }
-    
 
     // {
     //     auto start = std::chrono::high_resolution_clock::now();
@@ -69,8 +68,8 @@ int main() {
     //     auto start = std::chrono::high_resolution_clock::now();
     //     auto end = std::chrono::high_resolution_clock::now();
     //     int count_distinct_keyword = query_tables.count_distinct_keyword();
-    //     cout<< "Distinct keywords in table keyword are "<< count_distinct_keyword;
-    //     cout<<" [" << std::chrono::duration_cast<std::chrono::milliseconds>(end-start)<<" ms]\n";
+    //     cout << "Distinct keywords in table keyword are " << count_distinct_keyword;
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << "]\n";
     // }
 
     // //Lab 3
@@ -84,47 +83,59 @@ int main() {
     //     if(modified_title.production_year()[i] == 2069) modified_title.print_record(i);
     // }
 
-    //Lab 4
+    // Lab 4
     //// SELECT title FROM title WHERE production_year = (SELECT max(production_year) FROM title)
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto title_max_production_year = query_tables.max_production_year();
-        auto end = std::chrono::high_resolution_clock::now();
-        cout<< "SELECT title FROM title WHERE production_year = (SELECT max(production_year) FROM title) : " << title_max_production_year.size();
-        cout<<" [" << std::chrono::duration_cast<std::chrono::milliseconds>(end-start)<<" ms]\n";
-        // for(auto& rec : title_max_production_year){
-        //     cout<<rec <<'\n';
-        // }
-    }
+    // {
+    //     auto start = std::chrono::high_resolution_clock::now();
+    //     auto title_max_production_year = query_tables.max_production_year();
+    //     auto end = std::chrono::high_resolution_clock::now();
+    //     cout << "SELECT title FROM title WHERE production_year = (SELECT max(production_year) FROM title) : " << title_max_production_year.size();
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
+    //     // for(auto& rec : title_max_production_year){
+    //     //     cout<<rec <<'\n';
+    //     // }
+    // }
 
-    //SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
+    // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
 
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto title_aos_in_range = query_tables.title_aos_in_production_range(1970,2000);
-        auto end = std::chrono::high_resolution_clock::now();
-        cout<< "SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970: " << title_aos_in_range.size();
-        cout<<" [" << std::chrono::duration_cast<std::chrono::milliseconds>(end-start)<<" ms]\n";
-        // for(auto& rec : title_aos_in_range){
-        //     cout<<rec <<'\n';
-        // }
-    }
+    // {
+    //     auto start = std::chrono::high_resolution_clock::now();
+    //     auto title_aos_in_range = query_tables.title_aos_in_production_range(1970, 2000);
+    //     auto end = std::chrono::high_resolution_clock::now();
+    //     cout << "SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970: " << title_aos_in_range.size();
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
+    //     // for(auto& rec : title_aos_in_range){
+    //     //     cout<<rec <<'\n';
+    //     // }
+    // }
 
-
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto name_not_like = query_tables.name_not_like();
-        auto end = std::chrono::high_resolution_clock::now();
-        cout<< "SELECT * FROM company_name WHERE name not like '%Group%': " << name_not_like.size();
-        cout<<" [" << std::chrono::duration_cast<std::chrono::milliseconds>(end-start)<<" ms]\n";
-        // for(const auto& t : name_not_like){
-        //     cout<<t << "\n";
-        // }
-    }
+    // {
+    //     auto start = std::chrono::high_resolution_clock::now();
+    //     auto name_not_like = query_tables.name_not_like();
+    //     auto end = std::chrono::high_resolution_clock::now();
+    //     cout << "SELECT * FROM company_name WHERE name not like '%Group%': " << name_not_like.size();
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
+    //     // for(const auto& t : name_not_like){
+    //     //     cout<<t << "\n";
+    //     // }
+    // }
 
     // SELECT DISTINCT KEYWORDS
-    int distinct_count = query_tables.count_distinct_keyword2();
-    cout << "Distinct keywords in keyword_table2: " << distinct_count << endl;
-    
-    return 0;
+    // auto start = std::chrono::high_resolution_clock::now();
+    // int distinct_count = query_tables.count_distinct_keyword2();
+    // cout << "Distinct keywords in keyword_table_so: " << distinct_count << endl;
+
+    // Lab 05 - Batch
+    // SELECT DISTINCT KEYWORDS
+    int distinct_count = query_tables.batch_process_count_distinct_keyword();
+    cout << "Distinct keywords in keyword_table handled by batch: " << distinct_count << endl;
+
+    auto modified_keyword = query_tables.batch_process_replace_keyword();
+    for (size_t i = 0; i < modified_keyword.size(); ++i)
+    {
+        if (modified_keyword.keyword()[i].find("changedtotest") != string::npos)
+            modified_keyword.print_record(i);
+
+        return 0;
+    }
 }

@@ -9,45 +9,60 @@
 
 // imdb=# \d keyword
 //                         Table "public.keyword"
-//     Column     |         Type         | Collation | Nullable | Default 
+//     Column     |         Type         | Collation | Nullable | Default
 // ---------------+----------------------+-----------+----------+---------
-//  id            | integer              |           | not null | 
-//  keyword       | text                 |           | not null | 
-//  phonetic_code | character varying(5) |           |          | 
+//  id            | integer              |           | not null |
+//  keyword       | text                 |           | not null |
+//  phonetic_code | character varying(5) |           |          |
 // Indexes:
 //     "keyword_pkey" PRIMARY KEY, btree (id)
 
 using namespace std;
 
-namespace keyword_space{
-    class keyword_record{
+namespace keyword_space
+{
+    class keyword_record
+    {
 
-        private:
-            vector<int64_t> _id;
-            vector<string> _keyword;
-            vector<string> _phonetic_code;
+    private:
+        vector<int64_t> _id;
+        vector<string> _keyword;
+        vector<string> _phonetic_code;
 
-            keyword_record() = default;
-        public:
-            static expected<keyword_record, csv::err_t> load_from_file(string_view filePath, char delim='|');
+        static constexpr size_t BATCH_SIZE = 1024;
 
-            //getters
-            const vector<int64_t>& id()                   const noexcept {return _id;}         
-            const vector<string>& keyword()  const noexcept {return _keyword;}
-            const vector<string>& phonetic_code()  const noexcept {return _phonetic_code;}
+        keyword_record() = default;
 
-            //setter
-            void set_keyword(size_t i, const string& modified_value){_keyword[i] = modified_value;}
+    public:
+        static expected<keyword_record, csv::err_t> load_from_file(string_view filePath, char delim = '|');
 
-            size_t size() const {return _id.size();}
+        // getters
+        const vector<int64_t> &id() const noexcept { return _id; }
+        const vector<string> &keyword() const noexcept { return _keyword; }
+        const vector<string> &phonetic_code() const noexcept { return _phonetic_code; }
 
-            void print_record(size_t i) const{
-                cout<< "Keyword_record { "
-                << "id: " << _id[i] << ", "
-                << "keyword: " << _keyword[i] << ", "
-                << "phonetic_code: " << _phonetic_code[i] << "}\n ";
+        template <typename F>
+        void batch_process(F func) const
+        {
+
+            for (size_t i = 0; i < size(); i += BATCH_SIZE)
+            {
+                size_t chunk = std::min(BATCH_SIZE, size() - i);
+                func(i, chunk);
             }
+        }
+        // setter
+        void set_keyword(size_t i, const string &modified_value) { _keyword[i] = modified_value; }
 
+        size_t size() const { return _id.size(); }
+
+        void print_record(size_t i) const
+        {
+            cout << "Keyword_record { "
+                 << "id: " << _id[i] << ", "
+                 << "keyword: " << _keyword[i] << ", "
+                 << "phonetic_code: " << _phonetic_code[i] << "}\n ";
+        }
     };
 
 }

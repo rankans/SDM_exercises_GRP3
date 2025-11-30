@@ -45,9 +45,16 @@ namespace title_space{
             vector<string> _series_years;
             vector<string> _md5sum;
 
+            //For batch model implementation
+            static const size_t batch_size = 1024;
+
 
             title_record() = default;
         public:
+            struct batch{
+                size_t start_index;
+                size_t end_index;
+                };
             static expected<title_record, csv::err_t> load_from_file(string_view filePath, char delim='|'); //definition of load from file function
 
             //getters
@@ -63,6 +70,16 @@ namespace title_space{
             const vector<int64_t>& episode_nr()  const noexcept {return _episode_nr;}
             const vector<string>& series_years()  const noexcept {return _series_years;}
             const vector<string>& md5sum()  const noexcept {return _md5sum;}
+
+            // For lab 5 batch operations
+            batch next_batch(size_t& pointer) const{
+                if(pointer >= _id.size()) return{pointer, pointer};
+
+                size_t batch_end = min(pointer+batch_size, _id.size());
+                batch b{pointer, batch_end};
+                pointer = batch_end;
+                return b;
+            }
 
             //setter
             void set_production_year(size_t i, int64_t modified_year)  {_production_year[i] = modified_year;}

@@ -105,8 +105,57 @@ vector<string> queries_blueprint::title_aos_in_production_range(int year_start, 
 // SELECT count(distinct keyword) FROM keyword
 int queries_blueprint::count_distinct_keyword2() const {
     set<string> distinct_keywords;
-    for (auto const& rec : keyword_table2.records()) {
+    for (auto const& rec : keyword_table_aos.records()) {
         distinct_keywords.insert(rec.keyword());
     }
     return distinct_keywords.size();
 }
+
+//Lab 05
+
+//Lab 5--- BATCH MODEL IMPLEMENTATION
+
+    vector<string> queries_blueprint::title_in_production_range_batch(int year_start, int year_end) const{
+        vector<string> titles;
+        size_t cursor = 0;
+
+        while(true) {
+            title_space::title_record::batch b = title_table.next_batch(cursor);
+            if(b.start_index >= b.end_index) break; // No more batches to process
+
+            // process the current batch
+            for(size_t i = b.start_index; i < b.end_index; ++i){
+                if(title_table.production_year()[i] < year_end && title_table.production_year()[i] >= year_start){
+                    titles.push_back(title_table.title()[i]);
+                }
+            }
+        }
+        return titles;
+    }
+    
+    // SELECT distinct country_code FROM company_name
+    // set<string> distinct_country_code_batch(){
+        
+    // }
+
+    // SELECT count(distinct keyword) FROM keyword
+    int queries_blueprint::count_distinct_keyword_batch() const{
+        size_t cursor = 0;
+        set<string> distinct_keywords;
+
+        while(true) {
+            keyword_space::keyword_record::batch b = keyword_table.next_batch(cursor);
+            if(b.start_index >= b.end_index) break; // No more batches to process
+
+            // process the current batch
+            for(size_t i = b.start_index; i < b.end_index; ++i){
+                distinct_keywords.insert(keyword_table.keyword()[i]); 
+            }
+        }
+        return distinct_keywords.size();
+    }
+
+    // // SELECT * FROM company_name WHERE name not like '%Group%'
+    // vector<company_name_record> name_not_like_in_batch() {
+
+    // }

@@ -11,67 +11,73 @@
 
 using namespace std;
 
+class queries_blueprint
+{
 
-class queries_blueprint{
+private:
+    // title_space::title_record const& title_table;
+    title_space::title_record title_table; // title also needs to change
+    // keyword_space::keyword_record const& keyword_table;
+    keyword_space::keyword_record keyword_table; // for lab 3 we need to modify the original value
+    company_name const &company_table;
+    keyword_aos keyword_table_aos;
 
-    private:
-        // title_space::title_record const& title_table;
-        title_space::title_record title_table; //title also needs to change
-        // keyword_space::keyword_record const& keyword_table;
-        keyword_space::keyword_record keyword_table; // for lab 3 we need to modify the original value
-        company_name const& company_table;
-        keyword_aos keyword_table2;
+    // Lab 4
+    titleaos const &title_aos_table;
 
-        //Lab 4
-        titleaos const& title_aos_table;
+public:
+    queries_blueprint(
+        // const title_space::title_record& t,
+        title_space::title_record &t, // title also need to change
+        // const keyword_space::keyword_record& k,
+        keyword_space::keyword_record &k, // for lab 3 we need to modify the original table
+        const company_name &c,
+        keyword_aos &k_aos,
+        const titleaos &ta) : title_table(t),
+                              keyword_table(k),
+                              company_table(c),
+                              keyword_table_aos(k_aos),
+                              title_aos_table(ta)
+    {
+    }
 
+    // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
+    vector<string> title_in_production_range(int year_start, int year_end) const;
 
-        
+    // SELECT distinct country_code FROM company_name
+    set<string> dictinct_country_code() const;
 
+    // SELECT count(distinct keyword) FROM keyword
+    int count_distinct_keyword() const;
 
-    public:
+    // SELECT * FROM company_name WHERE name not like '%Group%'
+    vector<company_name_record> name_not_like() const;
 
-        queries_blueprint(
-                // const title_space::title_record& t,
-                title_space::title_record& t, //title also need to change
-                // const keyword_space::keyword_record& k,
-                keyword_space::keyword_record& k, // for lab 3 we need to modify the original table
-                const company_name& c,
-                keyword_aos& k2,
-                const titleaos& ta
-            ): 
-            title_table(t),
-            keyword_table(k),
-            company_table(c),
-            keyword_table2(k2),
-            title_aos_table(ta){}
+    // Lab 3
 
-        // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
-        vector<string> title_in_production_range(int year_start, int year_end) const;
+    keyword_space::keyword_record &replace_keyword();
 
-        // SELECT distinct country_code FROM company_name
-        set<string> dictinct_country_code() const;
+    title_space::title_record &replace_production_date();
 
-        // SELECT count(distinct keyword) FROM keyword
-        int count_distinct_keyword() const;
+    // Lab 4
+    //  SELECT title FROM title WHERE production_year = (SELECT max(production_year) FROM title)
+    vector<string> max_production_year() const;
 
-        // SELECT * FROM company_name WHERE name not like '%Group%'
-        vector<company_name_record> name_not_like() const;
+    // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
+    vector<string> title_aos_in_production_range(int year_start, int year_end) const;
 
-        //Lab 3
+    int count_distinct_keyword2() const;
 
-        keyword_space::keyword_record& replace_keyword(); 
+    // Lab 5--- BATCH MODEL IMPLEMENTATION
 
-        title_space::title_record& replace_production_date();
+    // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
+    vector<string> title_in_production_range_batch(int year_start, int year_end) const;
+    // SELECT distinct country_code FROM company_name
+    set<string> distinct_country_code_batch() const;
 
+    // SELECT count(distinct keyword) FROM keyword
+    int count_distinct_keyword_batch() const;
 
-        //Lab 4
-        // SELECT title FROM title WHERE production_year = (SELECT max(production_year) FROM title)
-        vector<string> max_production_year() const;
-
-        //SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
-        vector<string> title_aos_in_production_range(int year_start, int year_end) const;
-
-        int count_distinct_keyword2() const;
-
+    // SELECT * FROM company_name WHERE name not like '%Group%'
+    vector<company_name_record> name_not_like_in_batch() const;
 };

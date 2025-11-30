@@ -10,48 +10,49 @@
 
 using namespace std;
 
-int main() {
+int main()
+{
     auto title_table = title_space::title_record::load_from_file("/exercise/imdb/csv/title.csv");
     auto title_table_aos = titleaos::load_from_file("/exercise/imdb/csv/title.csv");
     auto keyword_table = keyword_space::keyword_record::load_from_file("/exercise/imdb/csv/keyword.csv");
     auto keyword_aos = keyword_aos::load_from_file("/exercise/imdb/csv/keyword.csv");
     auto company_table = company_name::load_from_file("/exercise/imdb/csv/company_name.csv");
-    
-    
-    if (!title_table || !keyword_table || !company_table) {
+    auto cn_soa = company_name_soa_record::load_from_file("/exercise/imdb/csv/company_name.csv");
+
+    if (!title_table || !keyword_table || !company_table)
+    {
         cerr << "Error loading tables: " << "\n";
         return 1;
     }
 
+    auto &title_val = *title_table;
+    auto &keyword_val = *keyword_table;
+    auto &company_val = *company_table;
+    auto &title_aos_val = *title_table_aos;
+    auto &keyword_aos_val = *keyword_aos;
+    auto &cn_soa_val = *cn_soa;
 
-    auto& title_val = *title_table;
-    auto& keyword_val = *keyword_table;
-    auto& company_val = *company_table;
-    auto& title_aos_val = *title_table_aos;
-    auto& keyword_aos_val = *keyword_aos;
+    cout << "Loaded " << title_val.size() << " records title table.";
+    cout << "\nLoaded " << keyword_val.size() << " records keyword table.";
+    cout << "\nLoaded " << company_val.records().size() << " records company table.\n\n\n";
 
-    cout<< "Loaded " << title_val.size() << " records title table.";
-    cout<< "\nLoaded " << keyword_val.size() << " records keyword table.";
-    cout<< "\nLoaded " << company_val.records().size() << " records company table.\n\n\n";
-
-    // title_val.print_record(1);  
+    // title_val.print_record(1);
     // keyword_val.print_record(1);
     // cout<< company_val.records()[1];
 
-    //Lab 2 class calls
-    queries_blueprint query_tables(title_val, keyword_val, company_val, keyword_aos_val, title_aos_val);
+    // Lab 2 class calls
+    queries_blueprint query_tables(title_val, keyword_val, company_val, keyword_aos_val, title_aos_val, cn_soa_val);
 
     {
         auto start = std::chrono::high_resolution_clock::now();
-        auto titles = query_tables.title_in_production_range(1970,2000);
+        auto titles = query_tables.title_in_production_range(1970, 2000);
         auto end = std::chrono::high_resolution_clock::now();
-        cout<<"Titles in the range are (Linear access): " << titles.size();
-        cout<<" [" << std::chrono::duration_cast<std::chrono::milliseconds>(end-start)<<" ms]\n";
+        cout << "Titles in the range are (Linear access): " << titles.size();
+        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
         // for(const auto& t : titles){
         //     cout<<t << "\n";
         // }
     }
-    
 
     // {
     //     auto start = std::chrono::high_resolution_clock::now();
@@ -69,8 +70,8 @@ int main() {
         auto start = std::chrono::high_resolution_clock::now();
         auto end = std::chrono::high_resolution_clock::now();
         int count_distinct_keyword = query_tables.count_distinct_keyword();
-        cout<< "Distinct keywords in table keyword are(Linear access) "<< count_distinct_keyword;
-        cout<<" [" << std::chrono::duration_cast<std::chrono::milliseconds>(end-start)<<" ms]\n";
+        cout << "Distinct keywords in table keyword are(Linear access) " << count_distinct_keyword;
+        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
     }
 
     // //Lab 3
@@ -110,7 +111,6 @@ int main() {
     //     // }
     // }
 
-
     // {
     //     auto start = std::chrono::high_resolution_clock::now();
     //     auto name_not_like = query_tables.name_not_like();
@@ -125,16 +125,15 @@ int main() {
     // // SELECT DISTINCT KEYWORDS
     // int distinct_count = query_tables.count_distinct_keyword2();
     // cout << "Distinct keywords in keyword_table2: " << distinct_count << endl;
-    
 
-    //Lab 5 Batch model
+    // Lab 5 Batch model
 
     {
         auto start = std::chrono::high_resolution_clock::now();
-        auto titles = query_tables.title_in_production_range_batch(1970,2000);
+        auto titles = query_tables.title_in_production_range_batch(1970, 2000);
         auto end = std::chrono::high_resolution_clock::now();
-        cout<<"Titles in the range are (Batch): " << titles.size();
-        cout<<" [" << std::chrono::duration_cast<std::chrono::milliseconds>(end-start)<<" ms]\n";
+        cout << "Titles in the range are (Batch): " << titles.size();
+        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
         // for(const auto& t : titles){
         //     cout<<t << "\n";
         // }
@@ -143,11 +142,10 @@ int main() {
     {
         auto start = std::chrono::high_resolution_clock::now();
         auto end = std::chrono::high_resolution_clock::now();
-        int count_distinct_keyword_batch = query_tables.count_distinct_keyword_batch();
-        cout<< "Distinct keywords in table keyword are (batch) "<< count_distinct_keyword_batch;
-        cout<<" [" << std::chrono::duration_cast<std::chrono::milliseconds>(end-start)<<" ms]\n";
+        company_name_soa_record cn_soa_records = query_tables.name_not_like_in_batch();
+        cout << "CN Querues result (batch)" << cn_soa_records;
+        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
     }
-    
 
     return 0;
 }

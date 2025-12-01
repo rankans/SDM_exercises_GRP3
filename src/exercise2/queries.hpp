@@ -83,7 +83,6 @@ public:
 
     // Lab 5--- Iterator MODEL IMPLEMENTATION
 
-    // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
     struct TitleInRangeIter
     {
         struct iterator
@@ -131,7 +130,6 @@ public:
         iterator end() const { return iterator(table, table.size(), start_year, end_year); }
     };
 
-    // SELECT count(distinct keyword) FROM keyword
     struct KeywordIter
     {
         struct iterator
@@ -166,6 +164,83 @@ public:
         iterator end() const { return iterator(table, table.size()); }
     };
 
+    struct NameNotLikeIter
+    {
+        struct iterator
+        {
+            const company_name &table;
+            size_t idx;
+
+            iterator(const company_name &t, size_t i) : table(t), idx(i) { advance(); }
+
+            void advance()
+            {
+                while (idx < table.records().size() &&
+                       table.records()[idx].name().find("Group") != std::string::npos)
+                {
+                    ++idx;
+                }
+            }
+
+            const company_name_record &operator*() const { return table.records()[idx]; }
+
+            iterator &operator++()
+            {
+                ++idx;
+                advance();
+                return *this;
+            }
+
+            bool operator!=(const iterator &other) const { return idx != other.idx; }
+        };
+
+        const company_name &table;
+
+        NameNotLikeIter(const company_name &t) : table(t) {}
+
+        iterator begin() const { return iterator(table, 0); }
+        iterator end() const { return iterator(table, table.records().size()); }
+    };
+
+    struct DistinctCountryIter
+    {
+        struct iterator
+        {
+            const company_name &table;
+            size_t idx;
+            std::set<std::string> seen;
+
+            iterator(const company_name &t, size_t i) : table(t), idx(i) { advance(); }
+
+            void advance()
+            {
+                while (idx < table.records().size() &&
+                       !seen.insert(table.records()[idx].country_code()).second)
+                {
+                    ++idx; // skip duplicates
+                }
+            }
+
+            const std::string &operator*() const { return table.records()[idx].country_code(); }
+
+            iterator &operator++()
+            {
+                ++idx;
+                advance();
+                return *this;
+            }
+
+            bool operator!=(const iterator &other) const { return idx != other.idx; }
+        };
+
+        const company_name &table;
+
+        DistinctCountryIter(const company_name &t) : table(t) {}
+
+        iterator begin() const { return iterator(table, 0); }
+        iterator end() const { return iterator(table, table.records().size()); }
+    };
+
     // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
     TitleInRangeIter title_in_production_range_iterator(int year_start, int year_end) const
     {
@@ -176,5 +251,8 @@ public:
     KeywordIter keyword_iterator() const { return KeywordIter(keyword_table); }
 
     // SELECT * FROM company_name WHERE name not like '%Group%'
+    NameNotLikeIter name_not_like_iterator() const { return NameNotLikeIter(company_table); }
+
     // SELECT distinct country_code FROM company_name
+    DistinctCountryIter distinct_country_iterator() const { return DistinctCountryIter(company_table); }
 };

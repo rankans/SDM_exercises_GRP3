@@ -152,7 +152,7 @@ int main()
         size_t count = 0;
         for (auto it = iter.begin(); it != iter.end(); ++it)
         {
-            cout << "Title: " << *it << "\n";
+            // cout << "Title: " << *it << "\n";
             ++count;
         }
         auto end = std::chrono::high_resolution_clock::now();
@@ -166,11 +166,39 @@ int main()
         std::set<std::string> distinct_keywords;
         for (auto it = iter.begin(); it != iter.end(); ++it)
         {
-            cout << "Keyword: " << *it << "\n"; // optional debug print
+            // cout << "Keyword: " << *it << "\n"; // optional debug print
             distinct_keywords.insert(*it);
         }
         auto end = std::chrono::high_resolution_clock::now();
         cout << "Total distinct keywords (Iterator model): " << distinct_keywords.size() << "\n";
+        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
+    }
+
+    {
+        auto start = std::chrono::high_resolution_clock::now();
+        auto iter = query_tables.name_not_like_iterator();
+        size_t count = 0;
+        for (auto it = iter.begin(); it != iter.end(); ++it)
+        {
+            // cout << "Company Name: " << it->name() << "\n"; // optional debug print
+            ++count;
+        }
+        auto end = std::chrono::high_resolution_clock::now();
+        cout << "Total companies without 'Group' (Iterator model): " << count << "\n";
+        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
+    }
+
+    {
+        auto start = std::chrono::high_resolution_clock::now();
+        auto iter = query_tables.distinct_country_iterator();
+        size_t count = 0;
+        for (auto it = iter.begin(); it != iter.end(); ++it)
+        {
+            // cout << "Country Code: " << *it << "\n"; // optional debug print
+            ++count;
+        }
+        auto end = std::chrono::high_resolution_clock::now();
+        cout << "Total distinct country codes (Iterator model): " << count << "\n";
         cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
     }
 

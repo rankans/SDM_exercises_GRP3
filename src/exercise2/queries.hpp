@@ -80,4 +80,61 @@ public:
 
     // SELECT * FROM company_name WHERE name not like '%Group%'
     vector<company_name_record> name_not_like_in_batch() const;
+
+    // Lab 5--- Iterator MODEL IMPLEMENTATION
+
+    // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
+    struct TitleInRangeIter
+    {
+        struct iterator
+        {
+            const title_space::title_record &table;
+            size_t idx;
+            int start_year, end_year;
+
+            iterator(const title_space::title_record &t, size_t i, int start, int end)
+                : table(t), idx(i), start_year(start), end_year(end)
+            {
+                advance();
+            }
+
+            // move to next valid row
+            void advance()
+            {
+                while (idx < table.size() &&
+                       !(table.production_year()[idx] >= start_year &&
+                         table.production_year()[idx] < end_year))
+                {
+                    ++idx;
+                }
+            }
+
+            std::string operator*() const { return table.title()[idx]; } // get current title
+
+            iterator &operator++() // move to next valid one
+            {
+                ++idx;
+                advance();
+                return *this;
+            }
+
+            bool operator!=(const iterator &other) const { return idx != other.idx; } // compare
+        };
+
+        const title_space::title_record &table;
+        int start_year, end_year;
+
+        TitleInRangeIter(const title_space::title_record &t, int start, int end)
+            : table(t), start_year(start), end_year(end) {}
+
+        iterator begin() const { return iterator(table, 0, start_year, end_year); }
+        iterator end() const { return iterator(table, table.size(), start_year, end_year); }
+    };
+    TitleInRangeIter title_in_production_range_iterator(int year_start, int year_end) const
+    {
+        return TitleInRangeIter(title_table, year_start, year_end);
+    }
+
+
+
 };

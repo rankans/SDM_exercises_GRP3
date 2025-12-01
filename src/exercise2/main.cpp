@@ -160,5 +160,19 @@ int main()
         cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
     }
 
+    {
+        auto start = std::chrono::high_resolution_clock::now();
+        auto iter = query_tables.keyword_iterator();
+        std::set<std::string> distinct_keywords;
+        for (auto it = iter.begin(); it != iter.end(); ++it)
+        {
+            cout << "Keyword: " << *it << "\n"; // optional debug print
+            distinct_keywords.insert(*it);
+        }
+        auto end = std::chrono::high_resolution_clock::now();
+        cout << "Total distinct keywords (Iterator model): " << distinct_keywords.size() << "\n";
+        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
+    }
+
     return 0;
 }

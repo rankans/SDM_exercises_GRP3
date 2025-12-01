@@ -130,11 +130,51 @@ public:
         iterator begin() const { return iterator(table, 0, start_year, end_year); }
         iterator end() const { return iterator(table, table.size(), start_year, end_year); }
     };
+
+    // SELECT count(distinct keyword) FROM keyword
+    struct KeywordIter
+    {
+        struct iterator
+        {
+            const keyword_space::keyword_record &table;
+            size_t idx;
+
+            iterator(const keyword_space::keyword_record &t, size_t start_idx)
+                : table(t), idx(start_idx)
+            {
+                advance(); // move to first valid element if needed (optional)
+            }
+
+            void advance() { ++idx; } // no filtering here, just move to next
+
+            const std::string &operator*() const { return table.keyword()[idx]; }
+
+            iterator &operator++()
+            {
+                advance();
+                return *this;
+            }
+
+            bool operator!=(const iterator &other) const { return idx != other.idx; }
+        };
+
+        const keyword_space::keyword_record &table;
+
+        KeywordIter(const keyword_space::keyword_record &t) : table(t) {}
+
+        iterator begin() const { return iterator(table, 0); }
+        iterator end() const { return iterator(table, table.size()); }
+    };
+
+    // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
     TitleInRangeIter title_in_production_range_iterator(int year_start, int year_end) const
     {
         return TitleInRangeIter(title_table, year_start, year_end);
     }
 
+    // SELECT count(distinct keyword) FROM keyword
+    KeywordIter keyword_iterator() const { return KeywordIter(keyword_table); }
 
-
+    // SELECT * FROM company_name WHERE name not like '%Group%'
+    // SELECT distinct country_code FROM company_name
 };

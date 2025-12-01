@@ -192,8 +192,84 @@ int queries_blueprint::count_distinct_keyword_batch() const
 // Lab 5--- Iterator MODEL IMPLEMENTATION
 
 // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
-queries_blueprint::TitleInRangeIter
-queries_blueprint::title_in_production_range_iterator(int year_start, int year_end) const
+struct TitleInRangeIter
 {
-    return TitleInRangeIter(title_table, year_start, year_end);
-}
+    struct iterator
+    {
+        const title_space::title_record &table;
+        size_t idx;
+        int start_year, end_year;
+
+        iterator(const title_space::title_record &t, size_t i, int start, int end)
+            : table(t), idx(i), start_year(start), end_year(end)
+        {
+            advance();
+        }
+
+        // move to next valid row
+        void advance()
+        {
+            while (idx < table.size() &&
+                   !(table.production_year()[idx] >= start_year &&
+                     table.production_year()[idx] < end_year))
+            {
+                ++idx;
+            }
+        }
+
+        std::string operator*() const { return table.title()[idx]; } // get current title
+
+        iterator &operator++() // move to next valid one
+        {
+            ++idx;
+            advance();
+            return *this;
+        }
+
+        bool operator!=(const iterator &other) const { return idx != other.idx; } // compare
+    };
+
+    const title_space::title_record &table;
+    int start_year, end_year;
+
+    TitleInRangeIter(const title_space::title_record &t, int start, int end)
+        : table(t), start_year(start), end_year(end) {}
+
+    iterator begin() const { return iterator(table, 0, start_year, end_year); }
+    iterator end() const { return iterator(table, table.size(), start_year, end_year); }
+};
+
+// SELECT count(distinct keyword) FROM keyword
+struct KeywordIter
+{
+    struct iterator
+    {
+        const keyword_space::keyword_record &table;
+        size_t idx;
+
+        iterator(const keyword_space::keyword_record &t, size_t start_idx)
+            : table(t), idx(start_idx)
+        {
+            advance(); // move to first valid element if needed (optional)
+        }
+
+        void advance() { ++idx; } // no filtering here, just move to next
+
+        const std::string &operator*() const { return table.keyword()[idx]; }
+
+        iterator &operator++()
+        {
+            advance();
+            return *this;
+        }
+
+        bool operator!=(const iterator &other) const { return idx != other.idx; }
+    };
+
+    const keyword_space::keyword_record &table;
+
+    KeywordIter(const keyword_space::keyword_record &t) : table(t) {}
+
+    iterator begin() const { return iterator(table, 0); }
+    iterator end() const { return iterator(table, table.size()); }
+};

@@ -16,7 +16,7 @@ vector<string> queries_blueprint::title_in_production_range(int year_start, int 
             titles.push_back(title_table.title()[i]);
         }
     }
-    return titles; // in materalized model
+    return titles;
 }
 
 // SELECT distinct country_code FROM company_name
@@ -185,6 +185,31 @@ int queries_blueprint::count_distinct_keyword_batch() const
 }
 
 // // SELECT * FROM company_name WHERE name not like '%Group%'
-// vector<company_name_record> name_not_like_in_batch() {
+company_name_soa_record queries_blueprint::name_not_like_in_batch() const
+{
+    company_name_soa_record result; // new SOA table to store filtered rows
+    size_t cursor = 0;
 
-// }
+    while (true)
+    {
+        // Get next batch
+        auto b = company_name_soa_table.next_batch(cursor);
+        if (b.start_index >= b.end_index)
+            break;
+
+        // Scan this batch
+        for (size_t i = b.start_index; i < b.end_index; ++i)
+        {
+            const auto &name = company_name_soa_table.name()[i];
+
+            // name NOT LIKE '%Group%'
+            if (name.find("Group") == std::string::npos)
+            {
+                // append the whole row to the new SOA result
+                result.append_record(company_name_soa_table, i);
+            }
+        }
+    }
+
+    return result; // filtered SOA table
+}

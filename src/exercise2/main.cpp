@@ -17,6 +17,7 @@ int main()
     auto keyword_table = keyword_space::keyword_record::load_from_file("/exercise/imdb/csv/keyword.csv");
     auto keyword_aos = keyword_aos::load_from_file("/exercise/imdb/csv/keyword.csv");
     auto company_table = company_name::load_from_file("/exercise/imdb/csv/company_name.csv");
+    auto cn_soa = company_name_soa_record::load_from_file("/exercise/imdb/csv/company_name.csv");
 
     if (!title_table || !keyword_table || !company_table)
     {
@@ -29,6 +30,7 @@ int main()
     auto &company_val = *company_table;
     auto &title_aos_val = *title_table_aos;
     auto &keyword_aos_val = *keyword_aos;
+    auto &cn_soa_val = *cn_soa;
 
     cout << "Loaded " << title_val.size() << " records title table.";
     cout << "\nLoaded " << keyword_val.size() << " records keyword table.";
@@ -39,7 +41,7 @@ int main()
     // cout<< company_val.records()[1];
 
     // Lab 2 class calls
-    queries_blueprint query_tables(title_val, keyword_val, company_val, keyword_aos_val, title_aos_val);
+    queries_blueprint query_tables(title_val, keyword_val, company_val, keyword_aos_val, title_aos_val, cn_soa_val);
 
     {
         auto start = std::chrono::high_resolution_clock::now();
@@ -139,9 +141,17 @@ int main()
 
     {
         auto start = std::chrono::high_resolution_clock::now();
-        int count_distinct_keyword_batch = query_tables.count_distinct_keyword_batch();
         auto end = std::chrono::high_resolution_clock::now();
+        int count_distinct_keyword_batch = query_tables.count_distinct_keyword_batch();
         cout << "Distinct keywords in table keyword are (batch) " << count_distinct_keyword_batch;
+        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
+    }
+
+    {
+        auto start = std::chrono::high_resolution_clock::now();
+        auto end = std::chrono::high_resolution_clock::now();
+        company_name_soa_record cn_soa_records = query_tables.name_not_like_in_batch();
+        cout << "CN Querues result (batch)" << cn_soa_records;
         cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
     }
 
@@ -201,6 +211,8 @@ int main()
         cout << "Total distinct country codes (Iterator model): " << count << "\n";
         cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
     }
+    
 
+    
     return 0;
-}
+};

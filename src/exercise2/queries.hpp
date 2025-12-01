@@ -8,7 +8,7 @@
 #include "company_name.hpp"
 #include "titleaos.hpp"
 #include "keywordaos.hpp"
-#include "interator_structs.hpp"
+#include "company_name_SoA.hpp"
 
 using namespace std;
 
@@ -25,20 +25,25 @@ private:
 
     // Lab 4
     titleaos const &title_aos_table;
+    // Lab 5
+    company_name_soa_record const &company_name_soa_table;
 
 public:
     queries_blueprint(
         // const title_space::title_record& t,
-        title_space::title_record &t, // title also need to change
+        const title_space::title_record &t, // title also need to change
         // const keyword_space::keyword_record& k,
-        keyword_space::keyword_record &k, // for lab 3 we need to modify the original table
+        const keyword_space::keyword_record &k, // for lab 3 we need to modify the original table
         const company_name &c,
         keyword_aos &k_aos,
-        const titleaos &ta) : title_table(t),
-                              keyword_table(k),
-                              company_table(c),
-                              keyword_table_aos(k_aos),
-                              title_aos_table(ta)
+        const titleaos &ta,
+        const company_name_soa_record &cn_soa)
+        : title_table(t),
+          keyword_table(k),
+          company_table(c),
+          keyword_table_aos(k_aos),
+          title_aos_table(ta),
+          company_name_soa_table(cn_soa)
     {
     }
 
@@ -80,22 +85,5 @@ public:
     int count_distinct_keyword_batch() const;
 
     // SELECT * FROM company_name WHERE name not like '%Group%'
-    vector<company_name_record> name_not_like_in_batch() const;
-
-    // Lab 5--- Iterator MODEL IMPLEMENTATION
-
-    // SELECT title FROM title WHERE production_year < 2000 AND production_year >= 1970
-    TitleInRangeIter title_in_production_range_iterator(int year_start, int year_end) const
-    {
-        return TitleInRangeIter(title_table, year_start, year_end);
-    }
-
-    // SELECT count(distinct keyword) FROM keyword
-    KeywordIter keyword_iterator() const { return KeywordIter(keyword_table); }
-
-    // SELECT * FROM company_name WHERE name not like '%Group%'
-    NameNotLikeIter name_not_like_iterator() const { return NameNotLikeIter(company_table); }
-
-    // SELECT distinct country_code FROM company_name
-    DistinctCountryIter distinct_country_iterator() const { return DistinctCountryIter(company_table); }
+    company_name_soa_record name_not_like_in_batch() const;
 };

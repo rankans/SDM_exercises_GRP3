@@ -142,6 +142,14 @@ int main()
     {
         auto start = std::chrono::high_resolution_clock::now();
         auto end = std::chrono::high_resolution_clock::now();
+        int count_distinct_keyword_batch = query_tables.count_distinct_keyword_batch();
+        cout << "Distinct keywords in table keyword are (batch) " << count_distinct_keyword_batch;
+        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
+    }
+
+    {
+        auto start = std::chrono::high_resolution_clock::now();
+        auto end = std::chrono::high_resolution_clock::now();
         company_name_soa_record cn_soa_records = query_tables.name_not_like_in_batch();
         cout << "CN Querues result (batch)" << cn_soa_records;
         cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";

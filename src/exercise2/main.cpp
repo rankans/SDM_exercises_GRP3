@@ -5,6 +5,7 @@
 #include "keyword.hpp"
 #include "queries.hpp"
 #include "titleaos.hpp"
+#include "avx2_simd_filter.hpp"
 
 #include <set>
 
@@ -41,38 +42,38 @@ int main()
     // cout<< company_val.records()[1];
 
     // Lab 2 class calls
-    queries_blueprint query_tables(title_val, keyword_val, company_val, keyword_aos_val, title_aos_val, cn_soa_val);
-
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto titles = query_tables.title_in_production_range(1970, 2000);
-        auto end = std::chrono::high_resolution_clock::now();
-        cout << "Titles in the range are (Linear access): " << titles.size();
-        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
-        // for(const auto& t : titles){
-        //     cout<<t << "\n";
-        // }
-    }
+    // queries_blueprint query_tables(title_val, keyword_val, company_val, keyword_aos_val, title_aos_val, cn_soa_val);
 
     // {
     //     auto start = std::chrono::high_resolution_clock::now();
-    //     auto distinct_country_codes = query_tables.dictinct_country_code();
+    //     auto titles = query_tables.title_in_production_range(1970, 2000);
     //     auto end = std::chrono::high_resolution_clock::now();
-    //     cout<< "Number of distinct country codes are: " << distinct_country_codes.size();
-    //     cout<<" [" << std::chrono::duration_cast<std::chrono::milliseconds>(end-start)<<" ms]\n";
-
-    //     // for(const auto& t : distinct_country_codes){
+    //     cout << "Titles in the range are (Linear access): " << titles.size();
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
+    //     // for(const auto& t : titles){
     //     //     cout<<t << "\n";
     //     // }
     // }
 
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto end = std::chrono::high_resolution_clock::now();
-        int count_distinct_keyword = query_tables.count_distinct_keyword();
-        cout << "Distinct keywords in table keyword are(Linear access) " << count_distinct_keyword;
-        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
-    }
+    // // {
+    // //     auto start = std::chrono::high_resolution_clock::now();
+    // //     auto distinct_country_codes = query_tables.dictinct_country_code();
+    // //     auto end = std::chrono::high_resolution_clock::now();
+    // //     cout<< "Number of distinct country codes are: " << distinct_country_codes.size();
+    // //     cout<<" [" << std::chrono::duration_cast<std::chrono::milliseconds>(end-start)<<" ms]\n";
+
+    // //     // for(const auto& t : distinct_country_codes){
+    // //     //     cout<<t << "\n";
+    // //     // }
+    // // }
+
+    // {
+    //     auto start = std::chrono::high_resolution_clock::now();
+    //     auto end = std::chrono::high_resolution_clock::now();
+    //     int count_distinct_keyword = query_tables.count_distinct_keyword();
+    //     cout << "Distinct keywords in table keyword are(Linear access) " << count_distinct_keyword;
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
+    // }
 
     // //Lab 3
     // auto modified_keyword = query_tables.replace_keyword();
@@ -128,91 +129,92 @@ int main()
 
     // Lab 5 Batch model
 
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto titles = query_tables.title_in_production_range_batch(1970, 2000);
-        auto end = std::chrono::high_resolution_clock::now();
-        cout << "Titles in the range are (Batch): " << titles.size();
-        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
-        // for(const auto& t : titles){
-        //     cout<<t << "\n";
-        // }
-    }
+    // {
+    //     auto start = std::chrono::high_resolution_clock::now();
+    //     auto titles = query_tables.title_in_production_range_batch(1970, 2000);
+    //     auto end = std::chrono::high_resolution_clock::now();
+    //     cout << "Titles in the range are (Batch): " << titles.size();
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
+    //     // for(const auto& t : titles){
+    //     //     cout<<t << "\n";
+    //     // }
+    // }
 
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto end = std::chrono::high_resolution_clock::now();
-        int count_distinct_keyword_batch = query_tables.count_distinct_keyword_batch();
-        cout << "Distinct keywords in table keyword are (batch) " << count_distinct_keyword_batch;
-        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
-    }
+    // {
+    //     auto start = std::chrono::high_resolution_clock::now();
+    //     auto end = std::chrono::high_resolution_clock::now();
+    //     int count_distinct_keyword_batch = query_tables.count_distinct_keyword_batch();
+    //     cout << "Distinct keywords in table keyword are (batch) " << count_distinct_keyword_batch;
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
+    // }
 
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto end = std::chrono::high_resolution_clock::now();
-        company_name_soa_record cn_soa_records = query_tables.name_not_like_in_batch();
-        cout << "CN Querues result (batch)" << cn_soa_records;
-        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
-    }
+    // {
+    //     auto start = std::chrono::high_resolution_clock::now();
+    //     auto end = std::chrono::high_resolution_clock::now();
+    //     company_name_soa_record cn_soa_records = query_tables.name_not_like_in_batch();
+    //     cout << "CN Querues result (batch)" << cn_soa_records;
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start) << " ms]\n";
+    // }
 
-    // Lab 5 Iterator MODEL
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto iter = query_tables.title_in_production_range_iterator(1970, 2000);
-        size_t count = 0;
-        for (auto it = iter.begin(); it != iter.end(); ++it)
-        {
-            // cout << "Title: " << *it << "\n";
-            ++count;
-        }
-        auto end = std::chrono::high_resolution_clock::now();
-        cout << "Total titles in range (Iterator model): " << count << "\n";
-        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
-    }
+    // // Lab 5 Iterator MODEL
+    // {
+    //     auto start = std::chrono::high_resolution_clock::now();
+    //     auto iter = query_tables.title_in_production_range_iterator(1970, 2000);
+    //     size_t count = 0;
+    //     for (auto it = iter.begin(); it != iter.end(); ++it)
+    //     {
+    //         // cout << "Title: " << *it << "\n";
+    //         ++count;
+    //     }
+    //     auto end = std::chrono::high_resolution_clock::now();
+    //     cout << "Total titles in range (Iterator model): " << count << "\n";
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
+    // }
 
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto iter = query_tables.keyword_iterator();
-        std::set<std::string> distinct_keywords;
-        for (auto it = iter.begin(); it != iter.end(); ++it)
-        {
-            // cout << "Keyword: " << *it << "\n"; // optional debug print
-            distinct_keywords.insert(*it);
-        }
-        auto end = std::chrono::high_resolution_clock::now();
-        cout << "Total distinct keywords (Iterator model): " << distinct_keywords.size() << "\n";
-        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
-    }
+    // {
+    //     auto start = std::chrono::high_resolution_clock::now();
+    //     auto iter = query_tables.keyword_iterator();
+    //     std::set<std::string> distinct_keywords;
+    //     for (auto it = iter.begin(); it != iter.end(); ++it)
+    //     {
+    //         // cout << "Keyword: " << *it << "\n"; // optional debug print
+    //         distinct_keywords.insert(*it);
+    //     }
+    //     auto end = std::chrono::high_resolution_clock::now();
+    //     cout << "Total distinct keywords (Iterator model): " << distinct_keywords.size() << "\n";
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
+    // }
 
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto iter = query_tables.name_not_like_iterator();
-        size_t count = 0;
-        for (auto it = iter.begin(); it != iter.end(); ++it)
-        {
-            // cout << "Company Name: " << it->name() << "\n"; // optional debug print
-            ++count;
-        }
-        auto end = std::chrono::high_resolution_clock::now();
-        cout << "Total companies without 'Group' (Iterator model): " << count << "\n";
-        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
-    }
+    // {
+    //     auto start = std::chrono::high_resolution_clock::now();
+    //     auto iter = query_tables.name_not_like_iterator();
+    //     size_t count = 0;
+    //     for (auto it = iter.begin(); it != iter.end(); ++it)
+    //     {
+    //         // cout << "Company Name: " << it->name() << "\n"; // optional debug print
+    //         ++count;
+    //     }
+    //     auto end = std::chrono::high_resolution_clock::now();
+    //     cout << "Total companies without 'Group' (Iterator model): " << count << "\n";
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
+    // }
 
-    {
-        auto start = std::chrono::high_resolution_clock::now();
-        auto iter = query_tables.distinct_country_iterator();
-        size_t count = 0;
-        for (auto it = iter.begin(); it != iter.end(); ++it)
-        {
-            // cout << "Country Code: " << *it << "\n"; // optional debug print
-            ++count;
-        }
-        auto end = std::chrono::high_resolution_clock::now();
-        cout << "Total distinct country codes (Iterator model): " << count << "\n";
-        cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
-    }
-    
+    // {
+    //     auto start = std::chrono::high_resolution_clock::now();
+    //     auto iter = query_tables.distinct_country_iterator();
+    //     size_t count = 0;
+    //     for (auto it = iter.begin(); it != iter.end(); ++it)
+    //     {
+    //         // cout << "Country Code: " << *it << "\n"; // optional debug print
+    //         ++count;
+    //     }
+    //     auto end = std::chrono::high_resolution_clock::now();
+    //     cout << "Total distinct country codes (Iterator model): " << count << "\n";
+    //     cout << " [" << std::chrono::duration_cast<std::chrono::milliseconds>(end - start).count() << " ms]\n";
+    // }
 
-    
+    // Lab 7: SIMD Intel AVX2
+    avx2_simd_filter::avx2_simd_filter_and_print_titles(title_val);
+
     return 0;
 };

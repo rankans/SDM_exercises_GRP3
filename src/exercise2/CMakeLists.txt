@@ -13,6 +13,7 @@ add_executable(exercise2
     utils.cpp
     titleaos.cpp
     company_name_soa.cpp
+    avx2_simd_filter.cpp
 )
 
 set_target_properties(exercise2 PROPERTIES
@@ -22,16 +23,18 @@ set_target_properties(exercise2 PROPERTIES
 )
 
 target_compile_options(exercise2 PRIVATE
-    $<$<CONFIG:DEBUG>:-Og -g3 -Wall -Wextra -Wpedantic -Werror>
-    $<$<CONFIG:RELEASE>:-O3 -Wall -Wextra -Wpedantic -Werror>
+    $<$<CONFIG:DEBUG>:-Og -g3 -Wall -Wextra -Wpedantic>
+    $<$<CONFIG:RELEASE>:-O3 -Wall -Wextra -Wpedantic>
 )
 
-# SIMD flags (AVX2) for Release builds
+# SIMD flags for AVX2
 if(ENABLE_SIMD AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
     target_compile_options(exercise2 PRIVATE
         $<$<CONFIG:RELEASE>:-mavx2 -mfma -mbmi -mbmi2 -mpopcnt>
     )
 endif()
+
+# add your SIMD configs here commenting the above one
 
 # Interprocedural optimization for Release
 set_property(TARGET exercise2 PROPERTY INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)

@@ -1,3 +1,5 @@
+#ifdef USE_AVX2
+#include <immintrin.h>
 #include "avx2_simd_filter.hpp"
 #include <iostream>
 
@@ -42,3 +44,4 @@ namespace avx2_simd_filter
         std::cout << "Titles in range 1970–1999 (using SIMD Intel AVX2): " << count << "\n";
     }
 }
+#endif

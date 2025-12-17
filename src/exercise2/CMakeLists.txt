@@ -15,6 +15,7 @@ add_executable(exercise2
     company_name_soa.cpp
     avx2_simd_filter.cpp
     neon_simd_filter.cpp
+    mimd_ash.cpp           # NEW: Lab 8 file
 )
 
 set_target_properties(exercise2 PROPERTIES
@@ -28,20 +29,11 @@ target_compile_options(exercise2 PRIVATE
     $<$<CONFIG:RELEASE>:-O3 -Wall -Wextra -Wpedantic>
 )
 
-# SIMD flags for AVX2
-# if(ENABLE_SIMD AND CMAKE_CXX_COMPILER_ID MATCHES "GNU|Clang")
-#     target_compile_options(exercise2 PRIVATE
-#         $<$<CONFIG:RELEASE>:-mavx2 -mfma -mbmi -mbmi2 -mpopcnt>
-#     )
-# endif()
-
-# add your SIMD configs here commenting the above one
-# Detect architecture automatically
-include(CheckCXXCompilerFlag)
-
+# SIMD flags for AVX2 (Intel)
 if(ENABLE_SIMD)
     if(CMAKE_SYSTEM_PROCESSOR MATCHES "x86_64|AMD64")
         message(STATUS "Building with AVX2 (x86)")
+        include(CheckCXXCompilerFlag)
         check_cxx_compiler_flag("-mavx2" COMPILER_SUPPORTS_AVX2)
         if(COMPILER_SUPPORTS_AVX2)
             target_compile_definitions(exercise2 PRIVATE USE_AVX2=1)
@@ -55,3 +47,7 @@ endif()
 
 # Interprocedural optimization for Release
 set_property(TARGET exercise2 PROPERTY INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)
+
+# THREAD SUPPORT FOR Lab 8 MIMD
+find_package(Threads REQUIRED)
+target_link_libraries(exercise2 PRIVATE Threads::Threads)

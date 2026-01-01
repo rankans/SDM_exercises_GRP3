@@ -3,3 +3,4 @@ project(SDM CXX)
 
 add_subdirectory(src/exercise2)
 add_subdirectory(src/exercise2_new)
+add_subdirectory(src/exercise3)

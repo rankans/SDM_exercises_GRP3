@@ -64,3 +64,12 @@ WHERE b.movie_id IN (
 )
 AND a.keyword <> 'gaming';
 --3. For every valid year, calculate the smallest ”release date” and extract the country of origin. Report the year and the extracted string as Origin. [142]
+SELECT
+    t.production_year AS year,
+    SUBSTRING(MIN(a.title) FROM '\(([^)]+)\)') AS origin
+FROM title t
+JOIN aka_title a ON t.id = a.movie_id
+WHERE t.production_year IS NOT NULL
+  AND a.title LIKE '%(%' 
+GROUP BY t.production_year
+ORDER BY t.production_year;

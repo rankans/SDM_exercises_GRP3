@@ -15,6 +15,8 @@ add_executable(exercise2
     company_name_soa.cpp
     avx2_simd_filter.cpp
     neon_simd_filter.cpp
+    thread_execution_ran.cpp
+    title_thread_exec.cpp
 )
 
 set_target_properties(exercise2 PROPERTIES

@@ -7,6 +7,8 @@
 #include "titleaos.hpp"
 #include "avx2_simd_filter.hpp"
 #include "neon_simd_filter.hpp"
+#include "thread_execution_ran.hpp"
+#include "title_thread_exec.hpp"
 
 #include <set>
 
@@ -222,6 +224,14 @@ int main()
     // auto results = neon_simd_filter::neon_filter_positions(title_val, 1970, 2000);
     // neon_simd_filter::print_titles_from_positions(title_val, results);
     // std::cout << "Titles in range 1970 – 1999 (using SIMD Mac ARM_Neon): " << results.size() << "\n";
+
+    // thread processing
+
+    // thread_for_array processor(4);
+    // processor.run(keyword_val);
+
+    title_thread processor_title(4);
+    processor_title.runQuery(title_val, 1970, 2000);
 
     return 0;
 };

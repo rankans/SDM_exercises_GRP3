@@ -5,7 +5,6 @@
 
 namespace avx2_simd_filter
 {
-    using namespace title_space;
 
     void avx2_simd_filter_and_print_titles(const title_record &table)
     {

@@ -9,8 +9,8 @@ using namespace std;
 
 int main()
 {
-    auto title_table = title_space::title_record::load_from_file("/exercise/imdb/csv/title.csv");
-    auto keyword_table = keyword_space::keyword_record::load_from_file("/exercise/imdb/csv/keyword.csv");
+    auto title_table = title_record::load_from_file("/exercise/imdb/csv/title.csv");
+    auto keyword_table = keyword_record::load_from_file("/exercise/imdb/csv/keyword.csv");
 
     auto &title_val = *title_table;
     auto &keyword_val = *keyword_table;

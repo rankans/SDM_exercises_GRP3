@@ -5,11 +5,10 @@
 
 namespace neon_simd_filter
 {
-    using namespace title_space;
     std::vector<uint32_t>
     neon_filter_positions(const title_record &table,
-                        int64_t lower_bound,
-                        int64_t upper_bound)
+                          int64_t lower_bound,
+                          int64_t upper_bound)
     {
         const int64_t *years = table.production_year().data();
         size_t n = table.size();

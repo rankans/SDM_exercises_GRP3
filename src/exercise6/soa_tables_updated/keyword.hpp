@@ -5,7 +5,7 @@
 #include <cstdint>
 #include <expected>
 #include <vector>
-#include "../commons/utils.hpp"
+#include "commons/utils.hpp"
 
 // imdb=# \d keyword
 //                         Table "public.keyword"
@@ -19,23 +19,41 @@
 
 using namespace std;
 
-class keyword_record
+class keyword_ex6_updated_record
 {
 
 private:
     vector<int64_t> _id;
     vector<string> _keyword;
     vector<string> _phonetic_code;
+    static const size_t batch_size = 1024;
 
-    keyword_record() = default;
+    keyword_ex6_updated_record() = default;
 
 public:
-    static expected<keyword_record, csv::err_t> load_from_file(string_view filePath, char delim = '|');
+    struct batch
+    {
+        size_t start_index;
+        size_t end_index;
+    };
+    static expected<keyword_ex6_updated_record, csv::err_t> load_from_file(string_view filePath, char delim = '|');
 
     // getters
     const vector<int64_t> &id() const noexcept { return _id; }
     const vector<string> &keyword() const noexcept { return _keyword; }
     const vector<string> &phonetic_code() const noexcept { return _phonetic_code; }
+
+    // For lab 5 batch operations
+    batch next_batch(size_t &pointer) const
+    {
+        if (pointer >= _id.size())
+            return {pointer, pointer};
+
+        size_t batch_end = min(pointer + batch_size, _id.size());
+        batch b{pointer, batch_end};
+        pointer = batch_end;
+        return b;
+    }
 
     // setter
     void set_keyword(size_t i, const string &modified_value) { _keyword[i] = modified_value; }
@@ -44,7 +62,7 @@ public:
 
     void print_record(size_t i) const
     {
-        cout << "Keyword_record { "
+        cout << "keyword_ex6_updated_record { "
              << "id: " << _id[i] << ", "
              << "keyword: " << _keyword[i] << ", "
              << "phonetic_code: " << _phonetic_code[i] << "}\n ";

@@ -1,10 +1,11 @@
 #include <fstream>
 #include <stdexcept>
+
 #include "title.hpp"
 
 using namespace std;
 
-expected<title_record, csv::err_t> title_record::load_from_file(string_view filePath, char delim)
+expected<title_ex6_updated_record, csv::err_t> title_ex6_updated_record::load_from_file(string_view filePath, char delim)
 {
     ifstream file{string(filePath)};
     if (!file.is_open())
@@ -12,7 +13,7 @@ expected<title_record, csv::err_t> title_record::load_from_file(string_view file
         return unexpected("Unexpected error while opening file");
     }
 
-    title_record table;
+    title_ex6_updated_record table;
     string row;
     // size_t row_number = 1;
 

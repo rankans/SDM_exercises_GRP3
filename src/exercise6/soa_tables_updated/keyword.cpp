@@ -1,10 +1,11 @@
 #include <fstream>
 #include <stdexcept>
+
 #include "keyword.hpp"
 
 using namespace std;
 
-expected<keyword_record, csv::err_t> keyword_record::load_from_file(string_view filePath, char delim)
+expected<keyword_ex6_updated_record, csv::err_t> keyword_ex6_updated_record::load_from_file(string_view filePath, char delim)
 {
     ifstream file{string(filePath)};
     if (!file.is_open())
@@ -12,7 +13,7 @@ expected<keyword_record, csv::err_t> keyword_record::load_from_file(string_view 
         return unexpected("Unexpected error while opening file");
     }
 
-    keyword_record table;
+    keyword_ex6_updated_record table;
     string row;
 
     while (getline(file, row))

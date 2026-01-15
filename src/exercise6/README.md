@@ -1,0 +1,1 @@
+Materialization model is what we implemented in other exercises.

@@ -1,13 +1,13 @@
 #include "title_thread_exec.hpp"
 
-void title_thread::runQuery(const title_space::title_record &title_table,
+void title_thread::runQuery(const title_record &title_table,
                             int64_t year_start,
                             int64_t year_end)
 {
     processQuery(title_table, year_start, year_end);
 }
 
-void title_thread::processQuery(const title_space::title_record &title_table,
+void title_thread::processQuery(const title_record &title_table,
                                 int64_t year_start,
                                 int64_t year_end)
 {

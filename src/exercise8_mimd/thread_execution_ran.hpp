@@ -11,7 +11,7 @@ private:
     vector<int64_t> _sampleArray;
     int64_t _threadCount;
 
-    void loadSampleArray(const keyword_space::keyword_record &keyword_table);
+    void loadSampleArray(const keyword_record &keyword_table);
     void processArray();
     void processSubArray(int64_t start, int64_t end, int64_t *result);
 
@@ -21,5 +21,5 @@ public:
     {
     }
 
-    void run(const keyword_space::keyword_record &keyword_table);
+    void run(const keyword_record &keyword_table);
 };

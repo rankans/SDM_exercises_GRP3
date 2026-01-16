@@ -11,27 +11,27 @@ r1_aos_record::r1_aos_record(std::int64_t column_a, std::string column_b)
 
 r1_aos r1_aos::generate_relation(size_t X, std::int64_t Y)
 {
-    r1_aos relation;
+   r1_aos relation;
     relation._records.reserve(X);
     
-    std::random_device rd;
-    std::mt19937 gen(rd());
-    std::uniform_int_distribution<std::int64_t> int_dist(1, Y);
-    std::uniform_int_distribution<int> char_dist('A', 'Z');
-    std::uniform_int_distribution<int> len_dist(5, 15);  // Random string length
+    // Seed the random number generator
+    srand(static_cast<unsigned int>(time(nullptr)));
     
     for (size_t i = 0; i < X; ++i)
     {
-        std::int64_t random_int = int_dist(gen);
+        // Generate random integer between 1 and Y
+        std::int64_t random_int = (rand() % Y) + 1;
         
-        // Generate random string 
-        int str_len = len_dist(gen);
+        // Generate random string length between 5 and 15
+        int str_len = (rand() % 11) + 5;  // 11 = (15-5+1), +5 for minimum
         std::string random_str;
         random_str.reserve(str_len);
         
+        // Generate random uppercase letters A-Z
         for (int j = 0; j < str_len; ++j)
         {
-            random_str += static_cast<char>(char_dist(gen));
+            char random_char = 'A' + (rand() % 26);  // 26 letters A-Z
+            random_str += random_char;
         }
         
         relation._records.emplace_back(random_int, std::move(random_str));

@@ -1,19 +1,22 @@
 cmake_minimum_required(VERSION 3.20)
 
-set(CMAKE_CXX_STANDARD 23)
-set(CMAKE_CXX_STANDARD_REQUIRED ON)
-
-add_executable(exercise10_aos_main 
+add_executable(exercise10
     main.cpp
     AOS/r1_aos.cpp
+    SOA/r2_soa.cpp
 )
 
-target_include_directories(exercise10_aos_main PRIVATE 
-    ${CMAKE_CURRENT_SOURCE_DIR}
-    ${CMAKE_CURRENT_SOURCE_DIR}/AOS
+set_target_properties(exercise10 PROPERTIES
+    CXX_STANDARD 23
+    CXX_STANDARD_REQUIRED YES
+    CXX_EXTENSIONS NO
 )
 
-target_compile_options(exercise10_aos_main PRIVATE
-    $<$<CONFIG:Release>:-O3>
-    $<$<CONFIG:Debug>:-Og -g3>
+target_compile_options(exercise10 PRIVATE
+    $<$<CONFIG:DEBUG>:-Og -g3 -Wall -Wextra -Wpedantic>
+    $<$<CONFIG:RELEASE>:-O3 -Wall -Wextra -Wpedantic>
 )
+
+include(CheckCXXCompilerFlag)
+
+set_property(TARGET exercise10 PROPERTY INTERPROCEDURAL_OPTIMIZATION_RELEASE TRUE)

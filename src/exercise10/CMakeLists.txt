@@ -1,8 +1,9 @@
 cmake_minimum_required(VERSION 3.20)
 
 add_executable(exercise10
-    main.cpp
+    SOA/main.cpp
     AOS/r1_aos.cpp
+    SOA/r1_soa.cpp
     SOA/r2_soa.cpp
 )
 

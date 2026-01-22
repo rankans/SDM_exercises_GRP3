@@ -10,4 +10,3 @@ add_subdirectory(src/exercise7_simd/intel)
 add_subdirectory(src/exercise7_simd/mac)
 add_subdirectory(src/exercise8_mimd)
 add_subdirectory(src/exercise10)
-ßß

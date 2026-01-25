@@ -6,7 +6,6 @@
 #include "../soa_tables_updated/title.hpp"
 #include "../soa_tables_updated/keyword.hpp"
 #include "../soa_tables_updated/company_name_soa.hpp"
-#include "aos_table_defs/company_name.hpp"
 
 struct TitleInRangeIter
 {
@@ -90,21 +89,22 @@ struct NameNotLikeIter
 {
     struct iterator
     {
-        const company_name &table;
+        const company_name_ex6_updated_record &table;
         size_t idx;
 
-        iterator(const company_name &t, size_t i) : table(t), idx(i) { advance(); }
+        iterator(const company_name_ex6_updated_record &t, size_t i) : table(t), idx(i) { advance(); }
 
         void advance()
         {
-            while (idx < table.records().size() &&
-                   table.records()[idx].name().find("Group") != std::string::npos)
+            while (idx < table.size() &&
+                   table.name()[idx].find("Group") != std::string::npos)
             {
                 ++idx;
             }
         }
 
-        const company_name_record &operator*() const { return table.records()[idx]; }
+        // Return index to access all fields from the SOA table
+        size_t operator*() const { return idx; }
 
         iterator &operator++()
         {
@@ -116,34 +116,34 @@ struct NameNotLikeIter
         bool operator!=(const iterator &other) const { return idx != other.idx; }
     };
 
-    const company_name &table;
+    const company_name_ex6_updated_record &table;
 
-    NameNotLikeIter(const company_name &t) : table(t) {}
+    NameNotLikeIter(const company_name_ex6_updated_record &t) : table(t) {}
 
     iterator begin() const { return iterator(table, 0); }
-    iterator end() const { return iterator(table, table.records().size()); }
+    iterator end() const { return iterator(table, table.size()); }
 };
 
 struct DistinctCountryIter
 {
     struct iterator
     {
-        const company_name &table;
+        const company_name_ex6_updated_record &table;
         size_t idx;
         std::set<std::string> seen;
 
-        iterator(const company_name &t, size_t i) : table(t), idx(i) { advance(); }
+        iterator(const company_name_ex6_updated_record &t, size_t i) : table(t), idx(i) { advance(); }
 
         void advance()
         {
-            while (idx < table.records().size() &&
-                   !seen.insert(table.records()[idx].country_code()).second)
+            while (idx < table.size() &&
+                   !seen.insert(table.country_code()[idx]).second)
             {
                 ++idx; // skip duplicates
             }
         }
 
-        const std::string &operator*() const { return table.records()[idx].country_code(); }
+        const std::string &operator*() const { return table.country_code()[idx]; }
 
         iterator &operator++()
         {
@@ -155,10 +155,10 @@ struct DistinctCountryIter
         bool operator!=(const iterator &other) const { return idx != other.idx; }
     };
 
-    const company_name &table;
+    const company_name_ex6_updated_record &table;
 
-    DistinctCountryIter(const company_name &t) : table(t) {}
+    DistinctCountryIter(const company_name_ex6_updated_record &t) : table(t) {}
 
     iterator begin() const { return iterator(table, 0); }
-    iterator end() const { return iterator(table, table.records().size()); }
+    iterator end() const { return iterator(table, table.size()); }
 };

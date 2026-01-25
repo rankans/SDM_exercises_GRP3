@@ -10,24 +10,14 @@ using namespace std;
 int main()
 {
     auto title_table = title_ex6_updated_record::load_from_file("/exercise/imdb/csv/title.csv");
-    // auto title_table_aos = titleaos::load_from_file("/exercise/imdb/csv/title.csv");
     auto keyword_table = keyword_ex6_updated_record::load_from_file("/exercise/imdb/csv/keyword.csv");
-    // auto keyword_aos = keyword_aos::load_from_file("/exercise/imdb/csv/keyword.csv");
-    auto cn_aos_table = company_name::load_from_file("/exercise/imdb/csv/company_name.csv");
     auto cn_soa_table = company_name_ex6_updated_record::load_from_file("/exercise/imdb/csv/company_name.csv");
-
-    // if (!title_table || !keyword_table || !company_table)
-    // {
-    //     cerr << "Error loading tables: " << "\n";
-    //     return 1;
-    // }
 
     auto &title_val = *title_table;
     auto &keyword_val = *keyword_table;
     auto &company_val = *cn_soa_table;
-    auto &company_aos = *cn_aos_table;
 
-    exercise6_iterator_queries iterator_query_tables(title_val, keyword_val, company_aos);
+    exercise6_iterator_queries iterator_query_tables(title_val, keyword_val, company_val);
 
     // Lab 6 Iterator MODEL
     {
@@ -36,7 +26,6 @@ int main()
         size_t count = 0;
         for (auto it = iter.begin(); it != iter.end(); ++it)
         {
-            // cout << "Title: " << *it << "\n";
             ++count;
         }
         auto end = std::chrono::high_resolution_clock::now();
